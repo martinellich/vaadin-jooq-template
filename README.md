@@ -1,5 +1,7 @@
 # Vaadin/jOOQ Template
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=martinellich_vaadin-jooq-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=martinellich_vaadin-jooq-template)
+
 ## Introduction
 
 This is a template project, based on my experience and my opinion, that shows how to  integrate [Vaadin](https://vaadin.com) and
