@@ -27,12 +27,6 @@ public class UserRepository extends JooqRepository<User, UserRecord, String> {
         super(dslContext, USER);
     }
 
-    public Optional<UserRecord> findUserByUsername(String username) {
-        return dslContext.selectFrom(USER)
-                .where(USER.USERNAME.eq(username))
-                .fetchOptional();
-    }
-
     public Optional<UserWithRoles> findUserWithRolesByUsername(String username) {
         return dslContext.select(USER,
                         multiset(select(USER_ROLE.ROLE)
@@ -83,7 +77,7 @@ public class UserRepository extends JooqRepository<User, UserRecord, String> {
     }
 
     @Transactional
-    public void deleteByUsername(String username) {
+    public void deleteUserAndRolesByUsername(String username) {
         dslContext.deleteFrom(USER_ROLE)
                 .where(USER_ROLE.USERNAME.eq(username))
                 .execute();

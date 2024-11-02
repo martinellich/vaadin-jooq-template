@@ -89,7 +89,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
                                     getTranslation("Do you really want to delete the user {0}?", u.getUser().getUsername()),
                                     getTranslation("Delete"),
                                     confirmEvent -> {
-                                        userRepository.deleteByUsername(u.getUser().getUsername());
+                                        userRepository.deleteUserAndRolesByUsername(u.getUser().getUsername());
                                         clearForm();
                                         refreshGrid();
                                     },

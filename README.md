@@ -2,14 +2,14 @@
 
 ## Introduction
 
-This is a template project that shows how to integrate [Vaadin](https://vaadin.com) and [jOOQ](https://jooq.org) 
-and how to test it with [Karibu Testing](https://github.com/mvysny/karibu-testing) and [Playwright](https://playwright.dev).
+This is a template project, based on my experience and my opinion, that shows how to  integrate [Vaadin](https://vaadin.com) and
+[jOOQ](https://jooq.org) and how to test it with [Karibu Testing](https://github.com/mvysny/karibu-testing) and [Playwright](https://playwright.dev).
 
-It uses [Testcontainers](https://testcontainers.com) for generating the jOOQ classes and integration testing and 
-Flyway for the database migrations.
+It uses [Testcontainers](https://testcontainers.com) for generating the jOOQ classes and integration testing and Flyway for the database 
+migrations.
 
 This project can be used as a starting point to create your own Vaadin application with jOOQ.
-It contains all the necessary configuration and some examples to get you started.
+It contains all the necessary configurations and some examples to get you started.
 
 ## Running the Application
 
@@ -17,7 +17,7 @@ Before running the application, the jOOQ metamodel has to be generated using the
 
     ./mvnw compile
 
-Then you can simply run the application with a database started by Testcontainers from your IDE using the `TestVjApplication`.
+Then you can run the application with a database started by Testcontainers from your IDE using the `TestVjApplication`.
 
 **Important:**
 This class uses the [Spring Boot Testcontainers support](https://spring.io/blog/2023/06/23/improved-testcontainers-support-in-spring-boot-3-1/), introduced with Spring Boot 3.1.
@@ -30,19 +30,17 @@ There are two base classes:
 - `KaribuTest` can be used for fast [browser-less testing](https://mvysny.github.io/browserless-web-testing/), aka UI unit test. Karibu sets up a Vaadin mock environment.
 - `PlaywrightIT` configures Playwright for E2E tests. This class uses SpringBootTest at a random port.
 
-The Playwright test uses [Mopo](https://github.com/viritin/mopo),
-which simplifies the testing of Vaadin applications with Playwright.
+The Playwright test uses [Mopo](https://github.com/viritin/mopo), which simplifies the testing of Vaadin applications with Playwright.
 
 ## Deploying to Production
 
-To create a production build, call `mvnw clean package -Pproduction` (Windows),
+To create a production build, call `mvnw clean package -Pproduction` (Windows), 
 or `./mvnw clean package -Pproduction` (Mac & Linux).
 
-This will build a JAR file with all the dependencies and front-end resources,
-ready to be deployed. You can find the file in the `target` folder after the build completes.
+This will build a JAR file with all the dependencies and front-end resources, ready to be deployed. You can find 
+the file in the `target` folder after the build completes.
 
-Once the JAR file is built, you can run it using
-`java -jar target/vaadin-jooq-template-<version>.jar`
+Once the JAR file is built, you can run it using `java -jar target/vaadin-jooq-template-<version>.jar`
 
 ## Project structure
 
@@ -52,7 +50,8 @@ Once the JAR file is built, you can run it using
 
 ## Security Configuration
 
-The example uses JWT authentication for a better developer experience (for example, you don't have to re-login during development).
+The example uses JWT authentication for a better developer experience (for example, you don't have to re-log in during
+development).
 Read more in the blog of [Matti Tahvonen](https://vaadin.com/blog/jwt-authentication-with-vaadin-flow-for-better-developer-and-user-experience).
 
 ## Useful links

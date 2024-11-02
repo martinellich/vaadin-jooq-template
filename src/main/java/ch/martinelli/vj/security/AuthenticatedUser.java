@@ -21,7 +21,7 @@ public class AuthenticatedUser {
 
     public Optional<UserRecord> get() {
         return authenticationContext.getAuthenticatedUser(Jwt.class)
-                .flatMap(jwt -> userRepository.findUserByUsername(jwt.getSubject()));
+                .flatMap(jwt -> userRepository.findById(jwt.getSubject()));
     }
 
     public void logout() {
