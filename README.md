@@ -1,5 +1,5 @@
 # Vaadin/jOOQ Template
-
+![CI](https://github.com/martinellich/vaadin-jooq-template/actions/workflows/build.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=martinellich_vaadin-jooq-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=martinellich_vaadin-jooq-template)
 
 ## Introduction
