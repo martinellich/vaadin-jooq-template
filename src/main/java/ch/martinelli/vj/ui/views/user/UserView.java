@@ -1,7 +1,7 @@
 package ch.martinelli.vj.ui.views.user;
 
 import ch.martinelli.vj.domain.user.Role;
-import ch.martinelli.vj.domain.user.UserService;
+import ch.martinelli.vj.domain.user.UserRepository;
 import ch.martinelli.vj.domain.user.UserWithRoles;
 import ch.martinelli.vj.ui.components.Notifier;
 import ch.martinelli.vj.ui.layout.MainLayout;
@@ -38,7 +38,7 @@ import static ch.martinelli.vj.db.tables.User.USER;
 @Route(value = "users", layout = MainLayout.class)
 public class UserView extends Div implements HasUrlParameter<String>, HasDynamicTitle {
 
-    private final transient UserService userService;
+    private final transient UserRepository userRepository;
     private final transient PasswordEncoder passwordEncoder;
     private final Grid<UserWithRoles> grid = new Grid<>();
     private final Button cancel = new Button(getTranslation("Cancel"));
@@ -47,8 +47,8 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
     private transient UserWithRoles user;
     private TextField usernameField;
 
-    public UserView(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
+    public UserView(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
 
         setSizeFull();
@@ -89,7 +89,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
                                     getTranslation("Do you really want to delete the user {0}?", u.getUser().getUsername()),
                                     getTranslation("Delete"),
                                     confirmEvent -> {
-                                        userService.deleteByUsername(u.getUser().getUsername());
+                                        userRepository.deleteByUsername(u.getUser().getUsername());
                                         clearForm();
                                         refreshGrid();
                                     },
@@ -104,7 +104,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
         grid.sort(GridSortOrder.asc(usernameColumn).build());
         grid.setItems(query ->
-                userService.findAllUserWithRoles(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(USER, query)).stream()
+                userRepository.findAllUserWithRoles(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(USER, query)).stream()
         );
 
         // when a row is selected or deselected, populate form
@@ -138,7 +138,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
         if (username != null) {
-            userService.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
+            userRepository.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
         } else {
             user = null;
         }
@@ -202,7 +202,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
                     binder.writeChangedBindingsToBean(user);
 
                     try {
-                        userService.save(user);
+                        userRepository.save(user);
                         Notifier.success(getTranslation("User saved"));
                     } catch (DataAccessException ex) {
                         Notifier.error(getTranslation("User could not be saved!"));
