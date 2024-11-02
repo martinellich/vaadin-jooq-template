@@ -21,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Import(TestVjConfiguration.class)
 @SpringBootTest
@@ -54,15 +53,15 @@ public abstract class KaribuTest {
         // taken from https://www.baeldung.com/manually-set-user-authentication-spring-security
         // also see https://github.com/mvysny/karibu-testing/issues/47 for more details.
         final List<SimpleGrantedAuthority> authorities =
-                roles.stream().map(it -> new SimpleGrantedAuthority("ROLE_" + it)).collect(Collectors.toList());
+                roles.stream().map(it -> new SimpleGrantedAuthority("ROLE_" + it)).toList();
 
         var userDetails = new User(user, pass, authorities);
         var authReq = new UsernamePasswordAuthenticationToken(userDetails, pass, authorities);
         var sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authReq);
 
-        // however, you also need to make sure that ViewAccessChecker works properly;
-        // that requires a correct MockRequest.userPrincipal and MockRequest.isUserInRole()
+        // however, you also need to make sure that ViewAccessChecker works properly.
+        // that requires a correct MockRequest userPrincipal and MockRequest isUserInRole
         var request = (FakeRequest) VaadinServletRequest.getCurrent().getRequest();
         request.setUserPrincipalInt(authReq);
         request.setUserInRole((principal, role) -> roles.contains(role));
@@ -77,6 +76,7 @@ public abstract class KaribuTest {
                 request.setUserInRole((principal, role) -> false);
             }
         } catch (IllegalStateException ignore) {
+            // Ignore
         }
     }
 }
