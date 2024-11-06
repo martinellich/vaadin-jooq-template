@@ -1,7 +1,7 @@
 package ch.martinelli.vj.ui.views.person;
 
 import ch.martinelli.vj.db.tables.records.PersonRecord;
-import ch.martinelli.vj.domain.person.PersonRepository;
+import ch.martinelli.vj.domain.person.PersonDao;
 import ch.martinelli.vj.domain.user.Role;
 import ch.martinelli.vj.ui.components.Notifier;
 import ch.martinelli.vj.ui.layout.MainLayout;
@@ -36,7 +36,7 @@ import static ch.martinelli.vj.db.tables.Person.PERSON;
 @Route(value = "persons", layout = MainLayout.class)
 public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamicTitle {
 
-    private final transient PersonRepository personRepository;
+    private final transient PersonDao personDao;
 
     private final Grid<PersonRecord> grid = new Grid<>();
 
@@ -47,8 +47,8 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 
     private PersonRecord person;
 
-    public PersonView(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public PersonView(PersonDao personDao) {
+        this.personDao = personDao;
 
         setSizeFull();
 
@@ -93,7 +93,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
                                     getTranslation("Do you really want to delete the person {0} {1}?", p.getFirstName(), p.getLastName()),
                                     getTranslation("Delete"),
                                     confirmEvent -> {
-                                        personRepository.deleteById(p.getId());
+                                        personDao.deleteById(p.getId());
                                         clearForm();
                                         refreshGrid();
                                     },
@@ -108,7 +108,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 
         grid.sort(GridSortOrder.asc(firstNameColumn).build());
         grid.setItems(query ->
-                personRepository.findAll(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(PERSON, query)).stream()
+                personDao.findAll(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(PERSON, query)).stream()
         );
         // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> {
@@ -140,7 +140,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
     @Override
     public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
         if (personId != null) {
-            personRepository.findById(personId).ifPresent(personRecord -> person = personRecord);
+            personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
         } else {
             person = null;
         }
@@ -213,7 +213,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
                     binder.writeChangedBindingsToBean(person);
 
                     try {
-                        personRepository.save(person);
+                        personDao.save(person);
                         Notifier.success(getTranslation("Person saved"));
                     } catch (DataAccessException ex) {
                         Notifier.error(getTranslation("Person could not be saved!"));

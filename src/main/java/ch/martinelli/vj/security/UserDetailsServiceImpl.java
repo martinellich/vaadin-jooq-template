@@ -1,7 +1,7 @@
 package ch.martinelli.vj.security;
 
 import ch.martinelli.vj.db.tables.records.UserRecord;
-import ch.martinelli.vj.domain.user.UserRepository;
+import ch.martinelli.vj.domain.user.UserDAO;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,22 +16,22 @@ import java.util.List;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserDAO userDAO;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserDetailsServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userRepository.findById(username)
+        var user = userDAO.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user present with username: " + username));
         return new User(user.getUsername(), user.getHashedPassword(), getAuthorities(user));
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(UserRecord user) {
-        return userRepository.findRolesByUsername(user.getUsername())
+        return userDAO.findRolesByUsername(user.getUsername())
                 .stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole())).toList();
     }
 

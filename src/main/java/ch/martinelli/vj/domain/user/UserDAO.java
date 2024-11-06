@@ -1,6 +1,6 @@
 package ch.martinelli.vj.domain.user;
 
-import ch.martinelli.oss.jooqspring.JooqRepository;
+import ch.martinelli.oss.jooqspring.JooqDAO;
 import ch.martinelli.vj.db.tables.User;
 import ch.martinelli.vj.db.tables.records.UserRecord;
 import ch.martinelli.vj.db.tables.records.UserRoleRecord;
@@ -21,9 +21,9 @@ import static org.jooq.impl.DSL.select;
 
 
 @Service
-public class UserRepository extends JooqRepository<User, UserRecord, String> {
+public class UserDAO extends JooqDAO<User, UserRecord, String> {
 
-    public UserRepository(DSLContext dslContext) {
+    public UserDAO(DSLContext dslContext) {
         super(dslContext, USER);
     }
 
