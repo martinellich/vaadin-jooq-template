@@ -7,7 +7,7 @@ import ch.martinelli.vj.db.tables.records.UserRoleRecord;
 import org.jooq.DSLContext;
 import org.jooq.OrderField;
 import org.jooq.Record1;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
 
-@Service
+@Repository
 public class UserDAO extends JooqDAO<User, UserRecord, String> {
 
     public UserDAO(DSLContext dslContext) {

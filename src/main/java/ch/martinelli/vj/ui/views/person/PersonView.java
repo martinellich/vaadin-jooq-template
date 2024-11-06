@@ -1,7 +1,7 @@
 package ch.martinelli.vj.ui.views.person;
 
 import ch.martinelli.vj.db.tables.records.PersonRecord;
-import ch.martinelli.vj.domain.person.PersonDao;
+import ch.martinelli.vj.domain.person.PersonDAO;
 import ch.martinelli.vj.domain.user.Role;
 import ch.martinelli.vj.ui.components.Notifier;
 import ch.martinelli.vj.ui.layout.MainLayout;
@@ -36,7 +36,7 @@ import static ch.martinelli.vj.db.tables.Person.PERSON;
 @Route(value = "persons", layout = MainLayout.class)
 public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamicTitle {
 
-    private final transient PersonDao personDao;
+    private final transient PersonDAO personDao;
 
     private final Grid<PersonRecord> grid = new Grid<>();
 
@@ -47,7 +47,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 
     private PersonRecord person;
 
-    public PersonView(PersonDao personDao) {
+    public PersonView(PersonDAO personDao) {
         this.personDao = personDao;
 
         setSizeFull();

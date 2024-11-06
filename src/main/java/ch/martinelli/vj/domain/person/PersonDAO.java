@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import static ch.martinelli.vj.db.tables.Person.PERSON;
 
 @Repository
-public class PersonDao extends JooqDAO<Person, PersonRecord, Long> {
+public class PersonDAO extends JooqDAO<Person, PersonRecord, Long> {
 
-    public PersonDao(DSLContext dslContext) {
+    public PersonDAO(DSLContext dslContext) {
         super(dslContext, PERSON);
     }
 }
