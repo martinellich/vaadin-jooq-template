@@ -199,6 +199,7 @@
                                     <database>
                                         <inputSchema>public</inputSchema>
                                         <excludes>flyway_schema_history</excludes>
+                                        <embeddableDomains>.*</embeddableDomains>
                                         <!-- Used for optimistic locking. See VjJooqConfiguration class -->
                                         <recordVersionFields>version</recordVersionFields>
                                     </database>
