@@ -15,22 +15,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HelloWorldViewTest extends KaribuTest {
 
-    @BeforeEach
-    void navigate() {
-        UI.getCurrent().navigate(HelloWorldView.class);
-    }
+	@BeforeEach
+	void navigate() {
+		UI.getCurrent().navigate(HelloWorldView.class);
+	}
 
-    @Test
-    void say_hello() {
-        var appName = _get(H1.class);
-        assertThat(appName.getText()).isEqualTo("Vaadin jOOQ Template");
+	@Test
+	void say_hello() {
+		var appName = _get(H1.class);
+		assertThat(appName.getText()).isEqualTo("Vaadin jOOQ Template");
 
-        var title = _get(H2.class);
-        assertThat(title.getText()).isEqualTo("Hello World");
+		var title = _get(H2.class);
+		assertThat(title.getText()).isEqualTo("Hello World");
 
-        _setValue(_get(TextField.class, s -> s.withId("name")), "Test");
-        _click(_get(Button.class, s -> s.withId("say-hello")));
+		_setValue(_get(TextField.class, s -> s.withId("name")), "Test");
+		_click(_get(Button.class, s -> s.withId("say-hello")));
 
-        expectNotifications("Hello Test");
-    }
+		expectNotifications("Hello Test");
+	}
+
 }

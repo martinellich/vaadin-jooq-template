@@ -11,7 +11,8 @@ import static ch.martinelli.vj.db.tables.Person.PERSON;
 @Repository
 public class PersonDAO extends JooqDAO<Person, PersonRecord, Long> {
 
-    public PersonDAO(DSLContext dslContext) {
-        super(dslContext, PERSON);
-    }
+	public PersonDAO(DSLContext dslContext) {
+		super(dslContext, PERSON);
+	}
+
 }

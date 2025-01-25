@@ -7,28 +7,31 @@ import java.util.List;
 import java.util.Set;
 
 public class UserWithRoles {
-    private final UserRecord user;
-    private Set<String> roles;
 
-    public UserWithRoles() {
-        this.user = new UserRecord();
-        this.roles = new HashSet<>();
-    }
+	private final UserRecord user;
 
-    public UserWithRoles(UserRecord user, List<String> roles) {
-        this.user = user;
-        this.roles = new HashSet<>(roles);
-    }
+	private Set<String> roles;
 
-    public UserRecord getUser() {
-        return user;
-    }
+	public UserWithRoles() {
+		this.user = new UserRecord();
+		this.roles = new HashSet<>();
+	}
 
-    public Set<String> getRoles() {
-        return roles;
-    }
+	public UserWithRoles(UserRecord user, List<String> roles) {
+		this.user = user;
+		this.roles = new HashSet<>(roles);
+	}
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
+	public UserRecord getUser() {
+		return user;
+	}
+
+	public Set<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
+	}
+
 }

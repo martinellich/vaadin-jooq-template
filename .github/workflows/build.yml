@@ -20,6 +20,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B verify sonar:sonar -Pcoverage -Dsonar.projectKey=mvn -B verify sonar:sonar -Pcoverage -Dsonar.projectKey=martinellich_vaadin-jooq-template
+      run: mvn -B verify sonar:sonar -Pcoverage -Dsonar.projectKey=martinellich_vaadin-jooq-template
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

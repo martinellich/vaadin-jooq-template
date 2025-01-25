@@ -1,14 +1,11 @@
 package ch.martinelli.vj.ui.layout;
 
-import ch.martinelli.vj.security.AuthenticatedUser;
-import ch.martinelli.vj.ui.views.helloworld.HelloWorldView;
-import ch.martinelli.vj.ui.views.person.PersonView;
-import ch.martinelli.vj.ui.views.user.UserView;
+import ch.martinelli.vj.security.SecurityContext;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.icon.SvgIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
@@ -16,7 +13,7 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
@@ -24,105 +21,107 @@ import java.io.ByteArrayInputStream;
 
 public class MainLayout extends AppLayout {
 
-    private final transient AuthenticatedUser authenticatedUser;
-    private final AccessAnnotationChecker accessChecker;
+	private final transient SecurityContext securityContext;
 
-    private H2 viewTitle;
+	private H2 viewTitle;
 
-    public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
-        this.authenticatedUser = authenticatedUser;
-        this.accessChecker = accessChecker;
+	public MainLayout(SecurityContext securityContext) {
+		this.securityContext = securityContext;
 
-        setPrimarySection(Section.DRAWER);
-        addDrawerContent();
-        addHeaderContent();
-    }
+		setPrimarySection(Section.DRAWER);
+		addDrawerContent();
+		addHeaderContent();
+	}
 
-    private void addHeaderContent() {
-        var toggle = new DrawerToggle();
-        toggle.setAriaLabel("Menu toggle");
+	private void addHeaderContent() {
+		var toggle = new DrawerToggle();
+		toggle.setAriaLabel("Menu toggle");
 
-        viewTitle = new H2();
-        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+		viewTitle = new H2();
+		viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-        addToNavbar(true, toggle, viewTitle);
-    }
+		addToNavbar(true, toggle, viewTitle);
+	}
 
-    private void addDrawerContent() {
-        var appName = new H1("Vaadin jOOQ Template");
-        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+	private void addDrawerContent() {
+		var appName = new H1("Vaadin jOOQ Template");
+		appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-        var header = new Header(appName);
+		var header = new Header(appName);
 
-        var scroller = new Scroller(createNavigation());
+		var scroller = new Scroller(createNavigation());
 
-        addToDrawer(header, scroller, createFooter());
-    }
+		addToDrawer(header, scroller, createFooter());
+	}
 
-    private SideNav createNavigation() {
-        var nav = new SideNav();
+	private SideNav createNavigation() {
+		var nav = new SideNav();
 
-        if (accessChecker.hasAccess(HelloWorldView.class)) {
-            nav.addItem(new SideNavItem(getTranslation("Hello World"), HelloWorldView.class, VaadinIcon.GLOBE.create()));
+		var menuEntries = MenuConfiguration.getMenuEntries();
+		menuEntries.forEach(entry -> {
+			if (entry.icon() != null) {
+				nav.addItem(new SideNavItem(entry.title(), entry.path(), new SvgIcon(entry.icon())));
+			}
+			else {
+				nav.addItem(new SideNavItem(entry.title(), entry.path()));
+			}
+		});
 
-        }
-        if (accessChecker.hasAccess(PersonView.class)) {
-            nav.addItem(new SideNavItem(getTranslation("Persons"), PersonView.class, VaadinIcon.ARCHIVES.create()));
-        }
-        if (accessChecker.hasAccess(UserView.class)) {
-            nav.addItem(new SideNavItem(getTranslation("Users"), UserView.class, VaadinIcon.USER.create()));
-        }
+		return nav;
+	}
 
-        return nav;
-    }
+	private Footer createFooter() {
+		var layout = new Footer();
 
-    private Footer createFooter() {
-        var layout = new Footer();
+		var optionalUserRecord = securityContext.getLoggedInUser();
+		if (optionalUserRecord.isPresent()) {
+			var user = optionalUserRecord.get();
 
-        var optionalUserRecord = authenticatedUser.get();
-        if (optionalUserRecord.isPresent()) {
-            var user = optionalUserRecord.get();
+			var avatar = new Avatar("%s %s".formatted(user.getFirstName(), user.getLastName()));
+			var resource = new StreamResource("profile-pic", () -> new ByteArrayInputStream(user.getPicture()));
+			avatar.setImageResource(resource);
+			avatar.setThemeName("xsmall");
+			avatar.getElement().setAttribute("tabindex", "-1");
 
-            var avatar = new Avatar("%s %s".formatted(user.getFirstName(), user.getLastName()));
-            var resource = new StreamResource("profile-pic", () -> new ByteArrayInputStream(user.getPicture()));
-            avatar.setImageResource(resource);
-            avatar.setThemeName("xsmall");
-            avatar.getElement().setAttribute("tabindex", "-1");
+			var userMenu = new MenuBar();
+			userMenu.setThemeName("tertiary-inline contrast");
 
-            var userMenu = new MenuBar();
-            userMenu.setThemeName("tertiary-inline contrast");
+			var userName = userMenu.addItem("");
 
-            var userName = userMenu.addItem("");
+			var div = new Div();
+			div.add(avatar);
+			div.add("%s %s".formatted(user.getFirstName(), user.getLastName()));
+			div.add(LumoIcon.DROPDOWN.create());
+			div.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Gap.SMALL);
+			userName.add(div);
+			userName.getSubMenu().addItem(getTranslation("Sign out"), e -> securityContext.logout());
 
-            var div = new Div();
-            div.add(avatar);
-            div.add("%s %s".formatted(user.getFirstName(), user.getLastName()));
-            div.add(LumoIcon.DROPDOWN.create());
-            div.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Gap.SMALL);
-            userName.add(div);
-            userName.getSubMenu().addItem(getTranslation("Sign out"), e -> authenticatedUser.logout());
+			layout.add(userMenu);
+		}
+		else {
+			var loginLink = new Anchor("login", getTranslation("Sign in"));
+			layout.add(loginLink);
+		}
 
-            layout.add(userMenu);
-        } else {
-            var loginLink = new Anchor("login", getTranslation("Sign in"));
-            layout.add(loginLink);
-        }
+		return layout;
+	}
 
-        return layout;
-    }
+	@Override
+	protected void afterNavigation() {
+		super.afterNavigation();
+		viewTitle.setText(getCurrentPageTitle());
+	}
 
-    @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
-        viewTitle.setText(getCurrentPageTitle());
-    }
+	private String getCurrentPageTitle() {
+		if (getContent() instanceof HasDynamicTitle hasDynamicTitle) {
+			return hasDynamicTitle.getPageTitle() == null ? "" : hasDynamicTitle.getPageTitle();
+		}
+		else if (getContent().getClass().getAnnotation(PageTitle.class) != null) {
+			return getContent().getClass().getAnnotation(PageTitle.class).value();
+		}
+		else {
+			return MenuConfiguration.getPageHeader(getContent()).orElse("");
+		}
+	}
 
-    private String getCurrentPageTitle() {
-        if (getContent() instanceof HasDynamicTitle hasDynamicTitle) {
-            return hasDynamicTitle.getPageTitle() == null ? "" : hasDynamicTitle.getPageTitle();
-        } else {
-            var title = getContent().getClass().getAnnotation(PageTitle.class);
-            return title == null ? "" : title.value();
-        }
-    }
 }

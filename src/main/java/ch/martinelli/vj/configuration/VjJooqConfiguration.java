@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VjJooqConfiguration {
 
-    @Bean
-    public DefaultConfigurationCustomizer configurationCustomizer() {
-        // Enable optimistic locking
-        return (DefaultConfiguration c) -> c.settings()
-                .withExecuteWithOptimisticLocking(true);
-    }
+	@Bean
+	public DefaultConfigurationCustomizer configurationCustomizer() {
+		// Enable optimistic locking
+		return (DefaultConfiguration c) -> c.settings().withExecuteWithOptimisticLocking(true);
+	}
+
 }

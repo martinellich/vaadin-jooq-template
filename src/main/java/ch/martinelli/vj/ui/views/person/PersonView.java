@@ -29,223 +29,213 @@ import com.vaadin.flow.router.*;
 import io.seventytwo.vaadinjooq.util.VaadinJooqUtil;
 import jakarta.annotation.security.RolesAllowed;
 import org.jooq.exception.DataAccessException;
+import org.vaadin.lineawesome.LineAwesomeIcon;
+import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 import static ch.martinelli.vj.db.tables.Person.PERSON;
 
-@RolesAllowed({Role.USER, Role.ADMIN})
+@RolesAllowed({ Role.USER, Role.ADMIN })
+@Menu(order = 2, icon = LineAwesomeIconUrl.BUILDING)
 @Route(value = "persons", layout = MainLayout.class)
 public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamicTitle {
 
-    private final transient PersonDAO personDao;
+	private final transient PersonDAO personDao;
 
-    private final Grid<PersonRecord> grid = new Grid<>();
+	private final Grid<PersonRecord> grid = new Grid<>();
 
-    private final Button cancel = new Button(getTranslation("Cancel"));
-    private final Button save = new Button(getTranslation("Save"));
+	private final Button cancel = new Button(getTranslation("Cancel"));
 
-    private final Binder<PersonRecord> binder = new Binder<>();
+	private final Button save = new Button(getTranslation("Save"));
 
-    private PersonRecord person;
+	private final Binder<PersonRecord> binder = new Binder<>();
 
-    public PersonView(PersonDAO personDao) {
-        this.personDao = personDao;
+	private PersonRecord person;
 
-        setSizeFull();
+	public PersonView(PersonDAO personDao) {
+		this.personDao = personDao;
 
-        // Create UI
-        var splitLayout = new SplitLayout();
-        splitLayout.setSizeFull();
-        splitLayout.setSplitterPosition(80);
-        add(splitLayout);
+		setSizeFull();
 
-        // Configure Grid
-        grid.setSizeFull();
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+		// Create UI
+		var splitLayout = new SplitLayout();
+		splitLayout.setSizeFull();
+		splitLayout.setSplitterPosition(80);
+		add(splitLayout);
 
-        var firstNameColumn = grid.addColumn(PersonRecord::getFirstName)
-                .setHeader(getTranslation("First Name"))
-                .setSortable(true).setSortProperty(PERSON.FIRST_NAME.getName())
-                .setAutoWidth(true);
-        grid.addColumn(PersonRecord::getLastName)
-                .setHeader(getTranslation("Last Name"))
-                .setSortable(true).setSortProperty(PERSON.LAST_NAME.getName())
-                .setAutoWidth(true);
-        grid.addColumn(PersonRecord::getEmail)
-                .setHeader(getTranslation("E-Mail"))
-                .setSortable(true).setSortProperty(PERSON.EMAIL.getName())
-                .setAutoWidth(true);
-        grid.addComponentColumn(p -> {
-                    var importantCheckbox = new Checkbox();
-                    importantCheckbox.setReadOnly(true);
-                    importantCheckbox.setValue(p.getImportant());
-                    return importantCheckbox;
-                })
-                .setHeader(getTranslation("Important"))
-                .setAutoWidth(true);
+		// Configure Grid
+		grid.setSizeFull();
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
-        var addIcon = VaadinIcon.PLUS.create();
-        addIcon.addClickListener(e -> clearForm());
-        grid.addComponentColumn(p -> {
-                    var deleteIcon = VaadinIcon.TRASH.create();
-                    deleteIcon.addClickListener(e ->
-                            new ConfirmDialog(
-                                    getTranslation("Delete Person?"),
-                                    getTranslation("Do you really want to delete the person {0} {1}?", p.getFirstName(), p.getLastName()),
-                                    getTranslation("Delete"),
-                                    confirmEvent -> {
-                                        personDao.deleteById(p.getId());
-                                        clearForm();
-                                        refreshGrid();
-                                    },
-                                    getTranslation("Cancel"),
-                                    cancelEvent -> {
-                                    })
-                                    .open());
-                    return deleteIcon;
-                })
-                .setTextAlign(ColumnTextAlign.END)
-                .setHeader(addIcon);
+		var firstNameColumn = grid.addColumn(PersonRecord::getFirstName)
+			.setHeader(getTranslation("First Name"))
+			.setSortable(true)
+			.setSortProperty(PERSON.FIRST_NAME.getName())
+			.setAutoWidth(true);
+		grid.addColumn(PersonRecord::getLastName)
+			.setHeader(getTranslation("Last Name"))
+			.setSortable(true)
+			.setSortProperty(PERSON.LAST_NAME.getName())
+			.setAutoWidth(true);
+		grid.addColumn(PersonRecord::getEmail)
+			.setHeader(getTranslation("E-Mail"))
+			.setSortable(true)
+			.setSortProperty(PERSON.EMAIL.getName())
+			.setAutoWidth(true);
+		grid.addComponentColumn(p -> {
+			var importantCheckbox = new Checkbox();
+			importantCheckbox.setReadOnly(true);
+			importantCheckbox.setValue(p.getImportant());
+			return importantCheckbox;
+		}).setHeader(getTranslation("Important")).setAutoWidth(true);
 
-        grid.sort(GridSortOrder.asc(firstNameColumn).build());
-        grid.setItems(query ->
-                personDao.findAll(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(PERSON, query)).stream()
-        );
-        // when a row is selected or deselected, populate form
-        grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                UI.getCurrent().navigate(PersonView.class, event.getValue().getId());
-            } else {
-                clearForm();
-                UI.getCurrent().navigate(PersonView.class);
-            }
-        });
+		var addIcon = LineAwesomeIcon.PLUS_SOLID.create();
+		addIcon.addClickListener(e -> clearForm());
+		grid.addComponentColumn(p -> {
+			var deleteIcon = LineAwesomeIcon.TRASH_SOLID.create();
+			deleteIcon.addClickListener(e -> new ConfirmDialog(getTranslation("Delete Person?"),
+					getTranslation("Do you really want to delete the person {0} {1}?", p.getFirstName(),
+							p.getLastName()),
+					getTranslation("Delete"), confirmEvent -> {
+						personDao.deleteById(p.getId());
+						clearForm();
+						refreshGrid();
+					}, getTranslation("Cancel"), cancelEvent -> {
+					})
+				.open());
+			return deleteIcon;
+		}).setTextAlign(ColumnTextAlign.END).setHeader(addIcon);
 
-        var gridLayout = new VerticalLayout(grid);
-        gridLayout.setSizeFull();
-        splitLayout.addToPrimary(gridLayout);
+		grid.sort(GridSortOrder.asc(firstNameColumn).build());
+		grid.setItems(query -> personDao
+			.findAll(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(PERSON, query))
+			.stream());
+		// when a row is selected or deselected, populate form
+		grid.asSingleSelect().addValueChangeListener(event -> {
+			if (event.getValue() != null) {
+				UI.getCurrent().navigate(PersonView.class, event.getValue().getId());
+			}
+			else {
+				clearForm();
+				UI.getCurrent().navigate(PersonView.class);
+			}
+		});
 
-        var form = createForm();
-        var buttons = createButtonLayout();
+		var gridLayout = new VerticalLayout(grid);
+		gridLayout.setSizeFull();
+		splitLayout.addToPrimary(gridLayout);
 
-        var formLayout = new VerticalLayout(form, buttons);
-        formLayout.setSizeFull();
-        splitLayout.addToSecondary(formLayout);
-    }
+		var form = createForm();
+		var buttons = createButtonLayout();
 
-    private void clearForm() {
-        person = null;
-        binder.readBean(null);
-    }
+		var formLayout = new VerticalLayout(form, buttons);
+		formLayout.setSizeFull();
+		splitLayout.addToSecondary(formLayout);
+	}
 
-    @Override
-    public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
-        if (personId != null) {
-            personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
-        } else {
-            person = null;
-        }
-        binder.readBean(person);
-        grid.select(person);
-    }
+	private void clearForm() {
+		person = null;
+		binder.readBean(null);
+	}
 
-    private FormLayout createForm() {
-        var formLayout = new FormLayout();
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
+		if (personId != null) {
+			personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
+		}
+		else {
+			person = null;
+		}
+		binder.readBean(person);
+		grid.select(person);
+	}
 
-        var firstNameField = new TextField(getTranslation("First Name"));
-        binder.forField(firstNameField)
-                .asRequired()
-                .bind(PersonRecord::getFirstName, PersonRecord::setFirstName);
+	private FormLayout createForm() {
+		var formLayout = new FormLayout();
 
-        var lastNameField = new TextField(getTranslation("Last Name"));
-        binder.forField(lastNameField)
-                .asRequired()
-                .bind(PersonRecord::getLastName, PersonRecord::setLastName);
+		var firstNameField = new TextField(getTranslation("First Name"));
+		binder.forField(firstNameField).asRequired().bind(PersonRecord::getFirstName, PersonRecord::setFirstName);
 
-        var emailField = new EmailField(getTranslation("Email"));
-        binder.forField(emailField)
-                .asRequired()
-                .bind(PersonRecord::getEmail, PersonRecord::setEmail);
+		var lastNameField = new TextField(getTranslation("Last Name"));
+		binder.forField(lastNameField).asRequired().bind(PersonRecord::getLastName, PersonRecord::setLastName);
 
-        var phoneField = new TextField(getTranslation("Phone"));
-        binder.forField(phoneField)
-                .asRequired()
-                .bind(PersonRecord::getPhone, PersonRecord::setPhone);
+		var emailField = new EmailField(getTranslation("Email"));
+		binder.forField(emailField).asRequired().bind(PersonRecord::getEmail, PersonRecord::setEmail);
 
-        var dateOfBirthField = new DatePicker(getTranslation("Date of birth"));
-        binder.forField(dateOfBirthField)
-                .asRequired()
-                .bind(PersonRecord::getDateOfBirth, PersonRecord::setDateOfBirth);
+		var phoneField = new TextField(getTranslation("Phone"));
+		binder.forField(phoneField).asRequired().bind(PersonRecord::getPhone, PersonRecord::setPhone);
 
-        var occupationField = new TextField(getTranslation("Occupation"));
-        binder.forField(occupationField)
-                .asRequired()
-                .bind(PersonRecord::getOccupation, PersonRecord::setOccupation);
+		var dateOfBirthField = new DatePicker(getTranslation("Date of birth"));
+		binder.forField(dateOfBirthField).asRequired().bind(PersonRecord::getDateOfBirth, PersonRecord::setDateOfBirth);
 
-        var roleField = new TextField(getTranslation("Role"));
-        binder.forField(roleField)
-                .asRequired()
-                .bind(PersonRecord::getRole, PersonRecord::setRole);
+		var occupationField = new TextField(getTranslation("Occupation"));
+		binder.forField(occupationField).asRequired().bind(PersonRecord::getOccupation, PersonRecord::setOccupation);
 
-        var importantCheckbox = new Checkbox(getTranslation("Important"));
-        binder.forField(importantCheckbox)
-                .bind(PersonRecord::getImportant, PersonRecord::setImportant);
+		var roleField = new TextField(getTranslation("Role"));
+		binder.forField(roleField).asRequired().bind(PersonRecord::getRole, PersonRecord::setRole);
 
-        formLayout.add(firstNameField, lastNameField, emailField, phoneField, dateOfBirthField, occupationField, roleField, importantCheckbox);
+		var importantCheckbox = new Checkbox(getTranslation("Important"));
+		binder.forField(importantCheckbox).bind(PersonRecord::getImportant, PersonRecord::setImportant);
 
-        return formLayout;
-    }
+		formLayout.add(firstNameField, lastNameField, emailField, phoneField, dateOfBirthField, occupationField,
+				roleField, importantCheckbox);
 
-    private HorizontalLayout createButtonLayout() {
-        var buttonLayout = new HorizontalLayout();
+		return formLayout;
+	}
 
-        cancel.addClickListener(e -> {
-            clearForm();
-            refreshGrid();
-        });
+	private HorizontalLayout createButtonLayout() {
+		var buttonLayout = new HorizontalLayout();
 
-        save.addClickListener(e -> {
-            if (binder.validate().isOk()) {
-                try {
-                    if (person == null) {
-                        person = new PersonRecord();
-                    }
+		cancel.addClickListener(e -> {
+			clearForm();
+			refreshGrid();
+		});
 
-                    binder.writeChangedBindingsToBean(person);
+		save.addClickListener(e -> {
+			if (binder.validate().isOk()) {
+				try {
+					if (person == null) {
+						person = new PersonRecord();
+					}
 
-                    try {
-                        personDao.save(person);
-                        Notifier.success(getTranslation("Person saved"));
-                    } catch (DataAccessException ex) {
-                        Notifier.error(getTranslation("Person could not be saved!"));
-                    }
-                } catch (ValidationException ex) {
-                    Notifier.error(getTranslation("There have been validation errors!"));
-                    ex.getValidationErrors().forEach(validationResult ->
-                            Notifier.error(validationResult.getErrorMessage()));
-                }
+					binder.writeChangedBindingsToBean(person);
 
-                clearForm();
-                refreshGrid();
+					try {
+						personDao.save(person);
+						Notifier.success(getTranslation("Person saved"));
+					}
+					catch (DataAccessException ex) {
+						Notifier.error(getTranslation("Person could not be saved!"));
+					}
+				}
+				catch (ValidationException ex) {
+					Notifier.error(getTranslation("There have been validation errors!"));
+					ex.getValidationErrors()
+						.forEach(validationResult -> Notifier.error(validationResult.getErrorMessage()));
+				}
 
-                UI.getCurrent().navigate(PersonView.class);
-            }
-        });
+				clearForm();
+				refreshGrid();
 
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+				UI.getCurrent().navigate(PersonView.class);
+			}
+		});
 
-        buttonLayout.add(save, cancel);
+		cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+		save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        return buttonLayout;
-    }
+		buttonLayout.add(save, cancel);
 
-    private void refreshGrid() {
-        grid.select(null);
-        grid.getDataProvider().refreshAll();
-    }
+		return buttonLayout;
+	}
 
-    @Override
-    public String getPageTitle() {
-        return getTranslation("Persons");
-    }
+	private void refreshGrid() {
+		grid.select(null);
+		grid.getDataProvider().refreshAll();
+	}
+
+	@Override
+	public String getPageTitle() {
+		return getTranslation("Persons");
+	}
+
 }

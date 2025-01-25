@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Theme(value = "vj")
 public class VjApplication implements AppShellConfigurator {
 
-    public static void main(String[] args) {
-        SpringApplication.run(VjApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(VjApplication.class, args);
+	}
+
 }

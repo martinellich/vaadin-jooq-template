@@ -7,33 +7,37 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.HasDynamicTitle;
+import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
+@AnonymousAllowed
+@Menu(order = 1, icon = LineAwesomeIconUrl.GLOBE_SOLID)
 @Route(value = "hello", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-@AnonymousAllowed
 public class HelloWorldView extends HorizontalLayout implements HasDynamicTitle {
 
-    public HelloWorldView() {
-        setMargin(true);
+	public HelloWorldView() {
+		setMargin(true);
 
-        var name = new TextField(getTranslation("Your name"));
-        name.setId("name");
+		var name = new TextField(getTranslation("Your name"));
+		name.setId("name");
 
-        var sayHello = new Button(getTranslation("Say hello"));
-        sayHello.setId("say-hello");
-        sayHello.addClickListener(e -> Notifier.info(getTranslation("Hello {0}", name.getValue())));
-        sayHello.addClickShortcut(Key.ENTER);
+		var sayHello = new Button(getTranslation("Say hello"));
+		sayHello.setId("say-hello");
+		sayHello.addClickListener(e -> Notifier.info(getTranslation("Hello {0}", name.getValue())));
+		sayHello.addClickShortcut(Key.ENTER);
 
-        add(name, sayHello);
+		add(name, sayHello);
 
-        setVerticalComponentAlignment(Alignment.END, name, sayHello);
-    }
+		setVerticalComponentAlignment(Alignment.END, name, sayHello);
+	}
 
-    @Override
-    public String getPageTitle() {
-        return getTranslation("Hello World");
-    }
+	@Override
+	public String getPageTitle() {
+		return getTranslation("Hello World");
+	}
+
 }

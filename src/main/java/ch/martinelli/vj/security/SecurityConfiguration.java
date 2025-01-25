@@ -19,30 +19,31 @@ import java.util.Base64;
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
 
-    private final String authSecret;
+	private final String authSecret;
 
-    public SecurityConfiguration(@Value("${jwt.auth.secret}") String authSecret) {
-        this.authSecret = authSecret;
-    }
+	public SecurityConfiguration(@Value("${jwt.auth.secret}") String authSecret) {
+		this.authSecret = authSecret;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(
-                authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll());
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(authorize -> authorize
+			.requestMatchers(new AntPathRequestMatcher("/images/*.png"),
+					new AntPathRequestMatcher("/line-awesome/**/*.svg"))
+			.permitAll());
 
-        super.configure(http);
+		super.configure(http);
 
-        setLoginView(http, LoginView.class);
+		setLoginView(http, LoginView.class);
 
-        // https://vaadin.com/blog/jwt-authentication-with-vaadin-flow-for-better-developer-and-user-experience
-        setStatelessAuthentication(http,
-                new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256),
-                "ch.martinelli.vj", 3600);
-    }
+		// https://vaadin.com/blog/jwt-authentication-with-vaadin-flow-for-better-developer-and-user-experience
+		setStatelessAuthentication(http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256),
+				"ch.martinelli.vj", 3600);
+	}
 
 }

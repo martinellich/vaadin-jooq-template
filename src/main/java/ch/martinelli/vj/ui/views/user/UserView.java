@@ -29,212 +29,220 @@ import io.seventytwo.vaadinjooq.util.VaadinJooqUtil;
 import jakarta.annotation.security.RolesAllowed;
 import org.jooq.exception.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.vaadin.lineawesome.LineAwesomeIcon;
+import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 import java.util.Set;
 
 import static ch.martinelli.vj.db.tables.User.USER;
 
 @RolesAllowed(Role.ADMIN)
+@Menu(order = 3, icon = LineAwesomeIconUrl.USERS_SOLID)
 @Route(value = "users", layout = MainLayout.class)
 public class UserView extends Div implements HasUrlParameter<String>, HasDynamicTitle {
 
-    private final transient UserDAO userDAO;
-    private final transient PasswordEncoder passwordEncoder;
-    private final Grid<UserWithRoles> grid = new Grid<>();
-    private final Button cancel = new Button(getTranslation("Cancel"));
-    private final Button save = new Button(getTranslation("Save"));
-    private final Binder<UserWithRoles> binder = new Binder<>();
-    private transient UserWithRoles user;
-    private TextField usernameField;
+	private final transient UserDAO userDAO;
 
-    public UserView(UserDAO userDAO, PasswordEncoder passwordEncoder) {
-        this.userDAO = userDAO;
-        this.passwordEncoder = passwordEncoder;
+	private final transient PasswordEncoder passwordEncoder;
 
-        setSizeFull();
+	private final Grid<UserWithRoles> grid = new Grid<>();
 
-        // Create UI
-        var splitLayout = new SplitLayout();
-        splitLayout.setSizeFull();
-        splitLayout.setSplitterPosition(80);
-        add(splitLayout);
+	private final Button cancel = new Button(getTranslation("Cancel"));
 
-        // Configure Grid
-        grid.setSizeFull();
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+	private final Button save = new Button(getTranslation("Save"));
 
-        var usernameColumn = grid.addColumn(u -> u.getUser().getUsername())
-                .setHeader(getTranslation("Username"))
-                .setSortable(true).setSortProperty(USER.USERNAME.getName())
-                .setAutoWidth(true);
-        grid.addColumn(u -> u.getUser().getFirstName())
-                .setHeader(getTranslation("First Name"))
-                .setSortable(true).setSortProperty(USER.FIRST_NAME.getName())
-                .setAutoWidth(true);
-        grid.addColumn(u -> u.getUser().getLastName())
-                .setHeader(getTranslation("Last Name"))
-                .setSortable(true).setSortProperty(USER.LAST_NAME.getName())
-                .setAutoWidth(true);
-        grid.addColumn(u -> String.join(", ", u.getRoles()))
-                .setHeader(getTranslation("Roles"))
-                .setAutoWidth(true);
+	private final Binder<UserWithRoles> binder = new Binder<>();
 
-        var addIcon = VaadinIcon.PLUS.create();
-        addIcon.addClickListener(e -> clearForm());
-        grid.addComponentColumn(u -> {
-                    var deleteIcon = VaadinIcon.TRASH.create();
-                    deleteIcon.addClickListener(e ->
-                            new ConfirmDialog(
-                                    getTranslation("Delete User?"),
-                                    getTranslation("Do you really want to delete the user {0}?", u.getUser().getUsername()),
-                                    getTranslation("Delete"),
-                                    confirmEvent -> {
-                                        userDAO.deleteUserAndRolesByUsername(u.getUser().getUsername());
-                                        clearForm();
-                                        refreshGrid();
-                                    },
-                                    getTranslation("Cancel"),
-                                    cancelEvent -> {
-                                    })
-                                    .open());
-                    return deleteIcon;
-                })
-                .setTextAlign(ColumnTextAlign.END)
-                .setHeader(addIcon);
+	private transient UserWithRoles user;
 
-        grid.sort(GridSortOrder.asc(usernameColumn).build());
-        grid.setItems(query ->
-                userDAO.findAllUserWithRoles(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(USER, query)).stream()
-        );
+	private TextField usernameField;
 
-        // when a row is selected or deselected, populate form
-        grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                UI.getCurrent().navigate(UserView.class, event.getValue().getUser().getUsername());
-            } else {
-                clearForm();
-                UI.getCurrent().navigate(UserView.class);
-            }
-        });
+	public UserView(UserDAO userDAO, PasswordEncoder passwordEncoder) {
+		this.userDAO = userDAO;
+		this.passwordEncoder = passwordEncoder;
 
-        var gridLayout = new VerticalLayout(grid);
-        gridLayout.setSizeFull();
-        splitLayout.addToPrimary(gridLayout);
+		setSizeFull();
 
-        var form = createForm();
-        var buttons = createButtonLayout();
+		// Create UI
+		var splitLayout = new SplitLayout();
+		splitLayout.setSizeFull();
+		splitLayout.setSplitterPosition(80);
+		add(splitLayout);
 
-        var formLayout = new VerticalLayout(form, buttons);
-        formLayout.setSizeFull();
-        splitLayout.addToSecondary(formLayout);
-    }
+		// Configure Grid
+		grid.setSizeFull();
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
-    private void clearForm() {
-        usernameField.setReadOnly(false);
-        user = null;
-        binder.readBean(null);
-    }
+		var usernameColumn = grid.addColumn(u -> u.getUser().getUsername())
+			.setHeader(getTranslation("Username"))
+			.setSortable(true)
+			.setSortProperty(USER.USERNAME.getName())
+			.setAutoWidth(true);
+		grid.addColumn(u -> u.getUser().getFirstName())
+			.setHeader(getTranslation("First Name"))
+			.setSortable(true)
+			.setSortProperty(USER.FIRST_NAME.getName())
+			.setAutoWidth(true);
+		grid.addColumn(u -> u.getUser().getLastName())
+			.setHeader(getTranslation("Last Name"))
+			.setSortable(true)
+			.setSortProperty(USER.LAST_NAME.getName())
+			.setAutoWidth(true);
+		grid.addColumn(u -> String.join(", ", u.getRoles())).setHeader(getTranslation("Roles")).setAutoWidth(true);
 
-    @Override
-    public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
-        if (username != null) {
-            userDAO.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
-        } else {
-            user = null;
-        }
-        binder.readBean(user);
-        grid.select(user);
+		var addIcon = LineAwesomeIcon.PLUS_SOLID.create();
+		addIcon.addClickListener(e -> clearForm());
+		grid.addComponentColumn(u -> {
+			var deleteIcon = LineAwesomeIcon.TRASH_SOLID.create();
+			deleteIcon.addClickListener(e -> new ConfirmDialog(getTranslation("Delete User?"),
+					getTranslation("Do you really want to delete the user {0}?", u.getUser().getUsername()),
+					getTranslation("Delete"), confirmEvent -> {
+						userDAO.deleteUserAndRolesByUsername(u.getUser().getUsername());
+						clearForm();
+						refreshGrid();
+					}, getTranslation("Cancel"), cancelEvent -> {
+					})
+				.open());
+			return deleteIcon;
+		}).setTextAlign(ColumnTextAlign.END).setHeader(addIcon);
 
-        if (user != null && user.getUser().getUsername() != null) {
-            usernameField.setReadOnly(true);
-        }
-    }
+		grid.sort(GridSortOrder.asc(usernameColumn).build());
+		grid.setItems(query -> userDAO
+			.findAllUserWithRoles(query.getOffset(), query.getLimit(), VaadinJooqUtil.orderFields(USER, query))
+			.stream());
 
-    private FormLayout createForm() {
-        var formLayout = new FormLayout();
+		// when a row is selected or deselected, populate form
+		grid.asSingleSelect().addValueChangeListener(event -> {
+			if (event.getValue() != null) {
+				UI.getCurrent().navigate(UserView.class, event.getValue().getUser().getUsername());
+			}
+			else {
+				clearForm();
+				UI.getCurrent().navigate(UserView.class);
+			}
+		});
 
-        usernameField = new TextField(getTranslation("Username"));
-        binder.forField(usernameField)
-                .asRequired()
-                .bind(u -> u.getUser().getUsername(), (u, s) -> u.getUser().setUsername(s));
+		var gridLayout = new VerticalLayout(grid);
+		gridLayout.setSizeFull();
+		splitLayout.addToPrimary(gridLayout);
 
-        var firstNameField = new TextField(getTranslation("First Name"));
-        binder.forField(firstNameField)
-                .asRequired()
-                .bind(u -> u.getUser().getFirstName(), (u, s) -> u.getUser().setFirstName(s));
+		var form = createForm();
+		var buttons = createButtonLayout();
 
-        var lastNameField = new TextField(getTranslation("Last Name"));
-        binder.forField(lastNameField)
-                .asRequired()
-                .bind(u -> u.getUser().getLastName(), (u, s) -> u.getUser().setLastName(s));
+		var formLayout = new VerticalLayout(form, buttons);
+		formLayout.setSizeFull();
+		splitLayout.addToSecondary(formLayout);
+	}
 
-        var passwordField = new PasswordField(getTranslation("Password"));
-        binder.forField(passwordField)
-                .asRequired()
-                .bind(u -> "", (u, s) -> u.getUser().setHashedPassword(passwordEncoder.encode(s)));
+	private void clearForm() {
+		usernameField.setReadOnly(false);
+		user = null;
+		binder.readBean(null);
+	}
 
-        var roleMultiSelect = new MultiSelectComboBox<String>(getTranslation("Roles"));
-        binder.forField(roleMultiSelect)
-                .bind(UserWithRoles::getRoles, UserWithRoles::setRoles);
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
+		if (username != null) {
+			userDAO.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
+		}
+		else {
+			user = null;
+		}
+		binder.readBean(user);
+		grid.select(user);
 
-        roleMultiSelect.setItems(Set.of(Role.ADMIN, Role.USER));
+		if (user != null && user.getUser().getUsername() != null) {
+			usernameField.setReadOnly(true);
+		}
+	}
 
-        formLayout.add(usernameField, firstNameField, lastNameField, passwordField, roleMultiSelect);
+	private FormLayout createForm() {
+		var formLayout = new FormLayout();
 
-        return formLayout;
-    }
+		usernameField = new TextField(getTranslation("Username"));
+		binder.forField(usernameField)
+			.asRequired()
+			.bind(u -> u.getUser().getUsername(), (u, s) -> u.getUser().setUsername(s));
 
-    private HorizontalLayout createButtonLayout() {
-        var buttonLayout = new HorizontalLayout();
+		var firstNameField = new TextField(getTranslation("First Name"));
+		binder.forField(firstNameField)
+			.asRequired()
+			.bind(u -> u.getUser().getFirstName(), (u, s) -> u.getUser().setFirstName(s));
 
-        cancel.addClickListener(e -> {
-            clearForm();
-            refreshGrid();
-        });
+		var lastNameField = new TextField(getTranslation("Last Name"));
+		binder.forField(lastNameField)
+			.asRequired()
+			.bind(u -> u.getUser().getLastName(), (u, s) -> u.getUser().setLastName(s));
 
-        save.addClickListener(e -> {
-            if (binder.validate().isOk()) {
-                try {
-                    if (user == null) {
-                        user = new UserWithRoles();
-                    }
+		var passwordField = new PasswordField(getTranslation("Password"));
+		binder.forField(passwordField)
+			.asRequired()
+			.bind(u -> "", (u, s) -> u.getUser().setHashedPassword(passwordEncoder.encode(s)));
 
-                    binder.writeChangedBindingsToBean(user);
+		var roleMultiSelect = new MultiSelectComboBox<String>(getTranslation("Roles"));
+		binder.forField(roleMultiSelect).bind(UserWithRoles::getRoles, UserWithRoles::setRoles);
 
-                    try {
-                        userDAO.save(user);
-                        Notifier.success(getTranslation("User saved"));
-                    } catch (DataAccessException ex) {
-                        Notifier.error(getTranslation("User could not be saved!"));
-                    }
-                } catch (ValidationException ex) {
-                    Notifier.error(getTranslation("There have been validation errors!"));
-                    ex.getValidationErrors().forEach(validationResult ->
-                            Notifier.error(validationResult.getErrorMessage()));
-                }
+		roleMultiSelect.setItems(Set.of(Role.ADMIN, Role.USER));
 
-                clearForm();
-                refreshGrid();
+		formLayout.add(usernameField, firstNameField, lastNameField, passwordField, roleMultiSelect);
 
-                UI.getCurrent().navigate(UserView.class);
-            }
-        });
+		return formLayout;
+	}
 
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+	private HorizontalLayout createButtonLayout() {
+		var buttonLayout = new HorizontalLayout();
 
-        buttonLayout.add(save, cancel);
+		cancel.addClickListener(e -> {
+			clearForm();
+			refreshGrid();
+		});
 
-        return buttonLayout;
-    }
+		save.addClickListener(e -> {
+			if (binder.validate().isOk()) {
+				try {
+					if (user == null) {
+						user = new UserWithRoles();
+					}
 
-    private void refreshGrid() {
-        grid.select(null);
-        grid.getDataProvider().refreshAll();
-    }
+					binder.writeChangedBindingsToBean(user);
 
-    @Override
-    public String getPageTitle() {
-        return getTranslation("Users");
-    }
+					try {
+						userDAO.save(user);
+						Notifier.success(getTranslation("User saved"));
+					}
+					catch (DataAccessException ex) {
+						Notifier.error(getTranslation("User could not be saved!"));
+					}
+				}
+				catch (ValidationException ex) {
+					Notifier.error(getTranslation("There have been validation errors!"));
+					ex.getValidationErrors()
+						.forEach(validationResult -> Notifier.error(validationResult.getErrorMessage()));
+				}
+
+				clearForm();
+				refreshGrid();
+
+				UI.getCurrent().navigate(UserView.class);
+			}
+		});
+
+		cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+		save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+		buttonLayout.add(save, cancel);
+
+		return buttonLayout;
+	}
+
+	private void refreshGrid() {
+		grid.select(null);
+		grid.getDataProvider().refreshAll();
+	}
+
+	@Override
+	public String getPageTitle() {
+		return getTranslation("Users");
+	}
+
 }
