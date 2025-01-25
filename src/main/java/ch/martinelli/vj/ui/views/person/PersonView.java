@@ -17,7 +17,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
@@ -103,7 +102,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 					})
 				.open());
 			return deleteIcon;
-		}).setTextAlign(ColumnTextAlign.END).setHeader(addIcon);
+		}).setTextAlign(ColumnTextAlign.END).setHeader(addIcon).setKey("actions");
 
 		grid.sort(GridSortOrder.asc(firstNameColumn).build());
 		grid.setItems(query -> personDao
