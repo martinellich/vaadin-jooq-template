@@ -25,7 +25,7 @@ class UserViewTest extends KaribuTest {
 
 	@BeforeEach
 	void navigate() {
-		login("admin", "admin", List.of(Role.ADMIN));
+		login("admin", List.of(Role.ADMIN));
 		UI.getCurrent().getPage().reload();
 		UI.getCurrent().navigate(UserView.class);
 	}

@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.List;
 
@@ -49,23 +49,22 @@ public abstract class KaribuTest {
 		MockVaadin.tearDown();
 	}
 
-	protected void login(String user, String pass, final List<String> roles) {
-		// taken from
-		// https://www.baeldung.com/manually-set-user-authentication-spring-security
-		// also see https://github.com/mvysny/karibu-testing/issues/47 for more details.
+	protected void login(String user, final List<String> roles) {
 		final List<SimpleGrantedAuthority> authorities = roles.stream()
 			.map(it -> new SimpleGrantedAuthority("ROLE_" + it))
 			.toList();
 
-		var userDetails = new User(user, pass, authorities);
-		var authReq = new UsernamePasswordAuthenticationToken(userDetails, pass, authorities);
+		JwtAuthenticationToken auth = new JwtAuthenticationToken(
+				Jwt.withTokenValue("token-value").header("alg", "HS256").subject(user).claim("scope", "read").build(),
+				authorities);
+		SecurityContextHolder.getContext().setAuthentication(auth);
 		var sc = SecurityContextHolder.getContext();
-		sc.setAuthentication(authReq);
+		sc.setAuthentication(auth);
 
 		// however, you also need to make sure that ViewAccessChecker works properly.
 		// that requires a correct MockRequest userPrincipal and MockRequest isUserInRole
 		var request = (FakeRequest) VaadinServletRequest.getCurrent().getRequest();
-		request.setUserPrincipalInt(authReq);
+		request.setUserPrincipalInt(auth);
 		request.setUserInRole((principal, role) -> roles.contains(role));
 	}
 
