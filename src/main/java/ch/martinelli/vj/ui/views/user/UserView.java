@@ -59,12 +59,37 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
 		setSizeFull();
 
-		// Create UI
 		var splitLayout = new SplitLayout();
 		splitLayout.setSizeFull();
 		splitLayout.setSplitterPosition(75);
 		add(splitLayout);
 
+		splitLayout.addToPrimary(createGrid());
+		splitLayout.addToSecondary(createForm());
+	}
+
+	@Override
+	public String getPageTitle() {
+		return getTranslation("Users");
+	}
+
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
+		if (username != null) {
+			userDAO.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
+		}
+		else {
+			user = null;
+		}
+		binder.readBean(user);
+		grid.select(user);
+
+		if (user != null && user.getUser().getUsername() != null) {
+			usernameField.setReadOnly(true);
+		}
+	}
+
+	private VerticalLayout createGrid() {
 		// Configure Grid
 		grid.setSizeFull();
 		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -120,39 +145,17 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
 		var gridLayout = new VerticalLayout(grid);
 		gridLayout.setSizeFull();
-		splitLayout.addToPrimary(gridLayout);
 
-		var form = createForm();
-		var buttons = createButtonLayout();
-
-		var formLayout = new VerticalLayout(form, buttons);
-		formLayout.setSizeFull();
-		splitLayout.addToSecondary(formLayout);
+		return gridLayout;
 	}
 
 	private void clearForm() {
 		usernameField.setReadOnly(false);
-		user = null;
-		binder.readBean(null);
-	}
-
-	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
-		if (username != null) {
-			userDAO.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
-		}
-		else {
-			user = null;
-		}
+		user = new UserWithRoles();
 		binder.readBean(user);
-		grid.select(user);
-
-		if (user != null && user.getUser().getUsername() != null) {
-			usernameField.setReadOnly(true);
-		}
 	}
 
-	private FormLayout createForm() {
+	private VerticalLayout createForm() {
 		var formLayout = new FormLayout();
 
 		usernameField = new TextField(getTranslation("Username"));
@@ -182,7 +185,11 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
 		formLayout.add(usernameField, firstNameField, lastNameField, passwordField, roleMultiSelect);
 
-		return formLayout;
+		var buttons = createButtonLayout();
+
+		var verticalLayout = new VerticalLayout(formLayout, buttons);
+		verticalLayout.setSizeFull();
+		return verticalLayout;
 	}
 
 	private HorizontalLayout createButtonLayout() {
@@ -196,10 +203,6 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 		save.addClickListener(e -> {
 			if (binder.validate().isOk()) {
 				try {
-					if (user == null) {
-						user = new UserWithRoles();
-					}
-
 					binder.writeChangedBindingsToBean(user);
 
 					try {
@@ -234,11 +237,6 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 	private void refreshGrid() {
 		grid.select(null);
 		grid.getDataProvider().refreshAll();
-	}
-
-	@Override
-	public String getPageTitle() {
-		return getTranslation("Users");
 	}
 
 }

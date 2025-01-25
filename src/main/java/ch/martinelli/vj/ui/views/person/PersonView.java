@@ -52,13 +52,33 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 
 		setSizeFull();
 
-		// Create UI
 		var splitLayout = new SplitLayout();
 		splitLayout.setSizeFull();
 		splitLayout.setSplitterPosition(75);
 		add(splitLayout);
 
-		// Configure Grid
+		splitLayout.addToPrimary(createGrid());
+		splitLayout.addToSecondary(createForm());
+	}
+
+	@Override
+	public String getPageTitle() {
+		return getTranslation("Persons");
+	}
+
+	@Override
+	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
+		if (personId != null) {
+			personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
+		}
+		else {
+			person = new PersonRecord();
+		}
+		binder.readBean(person);
+		grid.select(person);
+	}
+
+	private VerticalLayout createGrid() {
 		grid.setSizeFull();
 		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
@@ -118,34 +138,15 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 
 		var gridLayout = new VerticalLayout(grid);
 		gridLayout.setSizeFull();
-		splitLayout.addToPrimary(gridLayout);
-
-		var form = createForm();
-		var buttons = createButtonLayout();
-
-		var formLayout = new VerticalLayout(form, buttons);
-		formLayout.setSizeFull();
-		splitLayout.addToSecondary(formLayout);
+		return gridLayout;
 	}
 
 	private void clearForm() {
-		person = null;
-		binder.readBean(null);
-	}
-
-	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
-		if (personId != null) {
-			personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
-		}
-		else {
-			person = null;
-		}
+		person = new PersonRecord();
 		binder.readBean(person);
-		grid.select(person);
 	}
 
-	private FormLayout createForm() {
+	private VerticalLayout createForm() {
 		var formLayout = new FormLayout();
 
 		var firstNameField = new TextField(getTranslation("First Name"));
@@ -175,7 +176,11 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 		formLayout.add(firstNameField, lastNameField, emailField, phoneField, dateOfBirthField, occupationField,
 				roleField, importantCheckbox);
 
-		return formLayout;
+		var buttons = createButtonLayout();
+
+		var verticalLayout = new VerticalLayout(formLayout, buttons);
+		verticalLayout.setSizeFull();
+		return verticalLayout;
 	}
 
 	private HorizontalLayout createButtonLayout() {
@@ -189,10 +194,6 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 		save.addClickListener(e -> {
 			if (binder.validate().isOk()) {
 				try {
-					if (person == null) {
-						person = new PersonRecord();
-					}
-
 					binder.writeChangedBindingsToBean(person);
 
 					try {
@@ -227,11 +228,6 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 	private void refreshGrid() {
 		grid.select(null);
 		grid.getDataProvider().refreshAll();
-	}
-
-	@Override
-	public String getPageTitle() {
-		return getTranslation("Persons");
 	}
 
 }
