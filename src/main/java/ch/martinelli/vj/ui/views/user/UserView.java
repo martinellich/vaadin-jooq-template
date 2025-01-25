@@ -4,7 +4,6 @@ import ch.martinelli.vj.domain.user.Role;
 import ch.martinelli.vj.domain.user.UserDAO;
 import ch.martinelli.vj.domain.user.UserWithRoles;
 import ch.martinelli.vj.ui.components.Notifier;
-import ch.martinelli.vj.ui.layout.MainLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -29,15 +28,13 @@ import jakarta.annotation.security.RolesAllowed;
 import org.jooq.exception.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.lineawesome.LineAwesomeIcon;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 import java.util.Set;
 
 import static ch.martinelli.vj.db.tables.User.USER;
 
 @RolesAllowed(Role.ADMIN)
-@Menu(order = 3, icon = LineAwesomeIconUrl.USERS_SOLID)
-@Route(value = "users", layout = MainLayout.class)
+@Route(value = "users")
 public class UserView extends Div implements HasUrlParameter<String>, HasDynamicTitle {
 
 	private final transient UserDAO userDAO;
@@ -65,7 +62,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 		// Create UI
 		var splitLayout = new SplitLayout();
 		splitLayout.setSizeFull();
-		splitLayout.setSplitterPosition(80);
+		splitLayout.setSplitterPosition(75);
 		add(splitLayout);
 
 		// Configure Grid

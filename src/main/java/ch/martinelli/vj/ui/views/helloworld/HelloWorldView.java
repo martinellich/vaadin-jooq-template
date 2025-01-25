@@ -1,27 +1,21 @@
 package ch.martinelli.vj.ui.views.helloworld;
 
 import ch.martinelli.vj.ui.components.Notifier;
-import ch.martinelli.vj.ui.layout.MainLayout;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.HasDynamicTitle;
-import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @AnonymousAllowed
-@Menu(order = 1, icon = LineAwesomeIconUrl.GLOBE_SOLID)
-@Route(value = "hello", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
-public class HelloWorldView extends HorizontalLayout implements HasDynamicTitle {
+@Route(value = "hello")
+@RouteAlias(value = "")
+public class HelloWorldView extends VerticalLayout implements HasDynamicTitle {
 
 	public HelloWorldView() {
-		setMargin(true);
-
 		var name = new TextField(getTranslation("Your name"));
 		name.setId("name");
 
@@ -31,8 +25,6 @@ public class HelloWorldView extends HorizontalLayout implements HasDynamicTitle 
 		sayHello.addClickShortcut(Key.ENTER);
 
 		add(name, sayHello);
-
-		setVerticalComponentAlignment(Alignment.END, name, sayHello);
 	}
 
 	@Override

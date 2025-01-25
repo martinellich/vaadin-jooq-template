@@ -4,7 +4,6 @@ import ch.martinelli.vj.db.tables.records.PersonRecord;
 import ch.martinelli.vj.domain.person.PersonDAO;
 import ch.martinelli.vj.domain.user.Role;
 import ch.martinelli.vj.ui.components.Notifier;
-import ch.martinelli.vj.ui.layout.MainLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -29,13 +28,11 @@ import io.seventytwo.vaadinjooq.util.VaadinJooqUtil;
 import jakarta.annotation.security.RolesAllowed;
 import org.jooq.exception.DataAccessException;
 import org.vaadin.lineawesome.LineAwesomeIcon;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 import static ch.martinelli.vj.db.tables.Person.PERSON;
 
 @RolesAllowed({ Role.USER, Role.ADMIN })
-@Menu(order = 2, icon = LineAwesomeIconUrl.BUILDING)
-@Route(value = "persons", layout = MainLayout.class)
+@Route(value = "persons")
 public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamicTitle {
 
 	private final transient PersonDAO personDao;
@@ -58,7 +55,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 		// Create UI
 		var splitLayout = new SplitLayout();
 		splitLayout.setSizeFull();
-		splitLayout.setSplitterPosition(80);
+		splitLayout.setSplitterPosition(75);
 		add(splitLayout);
 
 		// Configure Grid
