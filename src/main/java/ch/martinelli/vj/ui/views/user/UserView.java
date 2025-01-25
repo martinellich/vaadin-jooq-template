@@ -192,6 +192,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 		return verticalLayout;
 	}
 
+	@SuppressWarnings("java:S1141")
 	private HorizontalLayout createButtonLayout() {
 		var buttonLayout = new HorizontalLayout();
 

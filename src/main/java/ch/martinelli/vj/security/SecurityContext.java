@@ -3,6 +3,9 @@ package ch.martinelli.vj.security;
 import ch.martinelli.vj.db.tables.records.UserRecord;
 import ch.martinelli.vj.domain.user.UserDAO;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +24,16 @@ public class SecurityContext {
 	}
 
 	public Optional<UserRecord> getLoggedInUser() {
-		return authenticationContext.getAuthenticatedUser(Jwt.class).flatMap(jwt -> userDAO.findById(jwt.getSubject()));
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null) {
+			if (authentication.getPrincipal() instanceof Jwt jwt) {
+				return userDAO.findById(jwt.getSubject());
+			}
+			else if (authentication.getPrincipal() instanceof User user) {
+				return userDAO.findById(user.getUsername());
+			}
+		}
+		return Optional.empty();
 	}
 
 	public void logout() {

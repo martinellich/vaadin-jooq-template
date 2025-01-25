@@ -26,12 +26,12 @@ class PersonViewTest extends KaribuTest {
 	@BeforeEach
 	void navigate() {
 		login("admin", "admin", List.of(Role.ADMIN));
+		UI.getCurrent().getPage().reload();
+		UI.getCurrent().navigate(PersonView.class);
 	}
 
 	@Test
 	void check_grid_size() {
-		UI.getCurrent().navigate(PersonView.class);
-
 		var grid = _get(Grid.class);
 		assertThat(GridKt._size(grid)).isEqualTo(100);
 	}
@@ -53,8 +53,6 @@ class PersonViewTest extends KaribuTest {
 
 	@Test
 	void delete_person() {
-		UI.getCurrent().navigate(PersonView.class);
-
 		var grid = _get(Grid.class);
 		assertThat(GridKt._size(grid)).isEqualTo(100);
 

@@ -183,6 +183,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 		return verticalLayout;
 	}
 
+	@SuppressWarnings("java:S1141")
 	private HorizontalLayout createButtonLayout() {
 		var buttonLayout = new HorizontalLayout();
 
