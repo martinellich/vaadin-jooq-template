@@ -24,7 +24,7 @@
         <vaadin-jooq.version>2.0.4</vaadin-jooq.version>
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
         <karibu-testing.version>2.2.1</karibu-testing.version>
-        <playwright.version>1.49.0</playwright.version>
+        <playwright.version>1.50.0</playwright.version>
         <mopo.version>0.0.3</mopo.version>
         <archunit.version>1.4.0</archunit.version>
         <jacoco.version>0.8.12</jacoco.version>
