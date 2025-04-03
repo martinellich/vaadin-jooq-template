@@ -27,7 +27,7 @@
         <playwright.version>1.51.0</playwright.version>
         <mopo.version>0.0.3</mopo.version>
         <archunit.version>1.4.0</archunit.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.13</jacoco.version>
         <spring-javaformat-maven-plugin.version>0.0.43</spring-javaformat-maven-plugin.version>
         <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
         <sonar.organization>martinellich</sonar.organization>
