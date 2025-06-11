@@ -1,9 +1,9 @@
-package ch.martinelli.vj.user.ui;
+package ch.martinelli.vj.core.ui;
 
+import ch.martinelli.vj.core.domain.Role;
+import ch.martinelli.vj.core.domain.UserDAO;
+import ch.martinelli.vj.core.domain.UserWithRoles;
 import ch.martinelli.vj.core.ui.components.Notifier;
-import ch.martinelli.vj.user.domain.Role;
-import ch.martinelli.vj.user.domain.UserDAO;
-import ch.martinelli.vj.user.domain.UserWithRoles;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -203,7 +203,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 		});
 
 		save.addClickListener(e -> {
-			if (binder.validate().isOk()) {
+			if (user != null && binder.validate().isOk()) {
 				try {
 					binder.writeChangedBindingsToBean(user);
 

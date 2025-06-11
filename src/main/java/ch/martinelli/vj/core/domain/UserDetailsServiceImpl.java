@@ -1,7 +1,6 @@
-package ch.martinelli.vj.core.configuration.security;
+package ch.martinelli.vj.core.domain;
 
 import ch.martinelli.vj.db.tables.records.UserRecord;
-import ch.martinelli.vj.user.domain.UserDAO;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

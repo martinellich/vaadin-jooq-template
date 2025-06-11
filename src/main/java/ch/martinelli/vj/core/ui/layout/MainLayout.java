@@ -1,9 +1,9 @@
 package ch.martinelli.vj.core.ui.layout;
 
-import ch.martinelli.vj.core.configuration.security.SecurityContext;
-import ch.martinelli.vj.core.ui.HelloWorldView;
+import ch.martinelli.vj.core.security.SecurityContext;
+import ch.martinelli.vj.core.ui.UserView;
+import ch.martinelli.vj.greeting.ui.HelloWorldView;
 import ch.martinelli.vj.person.ui.PersonView;
-import ch.martinelli.vj.user.ui.UserView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;

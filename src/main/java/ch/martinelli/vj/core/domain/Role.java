@@ -1,4 +1,4 @@
-package ch.martinelli.vj.user.domain;
+package ch.martinelli.vj.core.domain;
 
 public class Role {
 

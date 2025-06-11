@@ -1,5 +1,6 @@
-package ch.martinelli.vj;
+package ch.martinelli.vj.core.ui;
 
+import ch.martinelli.vj.TestVjConfiguration;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;

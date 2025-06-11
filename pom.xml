@@ -18,10 +18,12 @@
         <java.version>21</java.version>
         <vaadin.version>24.6.2</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
+
         <jooq.version>3.20.4</jooq.version>
         <jooq-spring.version>0.4.0</jooq-spring.version>
         <jooq-utilities.version>1.1.2</jooq-utilities.version>
         <vaadin-jooq.version>2.0.4</vaadin-jooq.version>
+
         <testcontainers-jooq-codegen-maven-plugin.version>0.0.4</testcontainers-jooq-codegen-maven-plugin.version>
         <karibu-testing.version>2.3.0</karibu-testing.version>
         <playwright.version>1.52.0</playwright.version>

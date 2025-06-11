@@ -1,5 +1,6 @@
-package ch.martinelli.vj;
+package ch.martinelli.vj.core.ui;
 
+import ch.martinelli.vj.TestVjConfiguration;
 import com.github.mvysny.fakeservlet.FakeRequest;
 import com.github.mvysny.kaributesting.v10.MockVaadin;
 import com.github.mvysny.kaributesting.v10.Routes;
@@ -32,7 +33,7 @@ public abstract class KaribuTest {
 
 	@BeforeAll
 	public static void discoverRoutes() {
-		routes = new Routes().autoDiscoverViews(KaribuTest.class.getPackageName());
+		routes = new Routes().autoDiscoverViews("ch.martinelli.vj");
 	}
 
 	@BeforeEach

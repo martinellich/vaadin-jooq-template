@@ -1,4 +1,4 @@
-package ch.martinelli.vj.core.ui;
+package ch.martinelli.vj.greeting.ui;
 
 import ch.martinelli.vj.core.ui.components.Notifier;
 import com.vaadin.flow.component.Key;

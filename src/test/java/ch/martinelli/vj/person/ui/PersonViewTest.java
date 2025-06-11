@@ -1,8 +1,8 @@
 package ch.martinelli.vj.person.ui;
 
-import ch.martinelli.vj.KaribuTest;
+import ch.martinelli.vj.core.domain.Role;
+import ch.martinelli.vj.core.ui.KaribuTest;
 import ch.martinelli.vj.db.tables.records.PersonRecord;
-import ch.martinelli.vj.user.domain.Role;
 import com.github.mvysny.kaributesting.v10.GridKt;
 import com.github.mvysny.kaributesting.v10.pro.ConfirmDialogKt;
 import com.vaadin.flow.component.Component;

@@ -1,7 +1,7 @@
-package ch.martinelli.vj.core.configuration.security;
+package ch.martinelli.vj.core.security;
 
+import ch.martinelli.vj.core.domain.UserDAO;
 import ch.martinelli.vj.db.tables.records.UserRecord;
-import ch.martinelli.vj.user.domain.UserDAO;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;

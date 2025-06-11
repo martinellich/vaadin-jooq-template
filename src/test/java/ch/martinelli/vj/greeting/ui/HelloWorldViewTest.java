@@ -1,6 +1,6 @@
-package ch.martinelli.vj.core.ui;
+package ch.martinelli.vj.greeting.ui;
 
-import ch.martinelli.vj.KaribuTest;
+import ch.martinelli.vj.core.ui.KaribuTest;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;

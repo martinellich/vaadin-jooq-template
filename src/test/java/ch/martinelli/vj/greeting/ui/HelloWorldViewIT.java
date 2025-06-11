@@ -1,6 +1,6 @@
-package ch.martinelli.vj.core.ui;
+package ch.martinelli.vj.greeting.ui;
 
-import ch.martinelli.vj.PlaywrightIT;
+import ch.martinelli.vj.core.ui.PlaywrightIT;
 import in.virit.mopo.Mopo;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,9 @@
 package ch.martinelli.vj.person.ui;
 
+import ch.martinelli.vj.core.domain.Role;
 import ch.martinelli.vj.core.ui.components.Notifier;
 import ch.martinelli.vj.db.tables.records.PersonRecord;
 import ch.martinelli.vj.person.domain.PersonDAO;
-import ch.martinelli.vj.user.domain.Role;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

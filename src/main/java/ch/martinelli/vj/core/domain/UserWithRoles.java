@@ -1,4 +1,4 @@
-package ch.martinelli.vj.user.domain;
+package ch.martinelli.vj.core.domain;
 
 import ch.martinelli.vj.db.tables.records.UserRecord;
 

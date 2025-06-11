@@ -1,6 +1,6 @@
 package ch.martinelli.vj.core.ui;
 
-import ch.martinelli.vj.core.configuration.security.SecurityContext;
+import ch.martinelli.vj.core.security.SecurityContext;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.BeforeEnterEvent;

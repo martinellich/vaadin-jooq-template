@@ -1,6 +1,5 @@
-package ch.martinelli.vj.core.configuration.security;
+package ch.martinelli.vj.core.security;
 
-import ch.martinelli.vj.core.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +35,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
 		super.configure(http);
 
-		setLoginView(http, LoginView.class);
+		setLoginView(http, "login");
 
 		// https://vaadin.com/blog/jwt-authentication-with-vaadin-flow-for-better-developer-and-user-experience
 		setStatelessAuthentication(http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256),

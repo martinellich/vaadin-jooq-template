@@ -1,4 +1,4 @@
-package ch.martinelli.vj.core.configuration.jooq;
+package ch.martinelli.vj.core.configuration;
 
 import org.jooq.impl.DefaultConfiguration;
 import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;

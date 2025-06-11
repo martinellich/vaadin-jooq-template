@@ -1,8 +1,9 @@
 package ch.martinelli.vj.user.ui;
 
-import ch.martinelli.vj.KaribuTest;
-import ch.martinelli.vj.user.domain.Role;
-import ch.martinelli.vj.user.domain.UserWithRoles;
+import ch.martinelli.vj.core.domain.Role;
+import ch.martinelli.vj.core.domain.UserWithRoles;
+import ch.martinelli.vj.core.ui.KaribuTest;
+import ch.martinelli.vj.core.ui.UserView;
 import com.github.mvysny.kaributesting.v10.GridKt;
 import com.github.mvysny.kaributesting.v10.pro.ConfirmDialogKt;
 import com.vaadin.flow.component.Component;
