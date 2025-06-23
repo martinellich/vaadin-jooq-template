@@ -52,8 +52,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 
 	private final TextField usernameField = new TextField(getTranslation("Username"));
 
-	@Nullable
-	private transient UserWithRoles user;
+	@Nullable private transient UserWithRoles user;
 
 	public UserView(UserDAO userDAO, PasswordEncoder passwordEncoder) {
 		this.userDAO = userDAO;
