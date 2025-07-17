@@ -21,14 +21,12 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.server.menu.MenuConfiguration;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
-import java.io.ByteArrayInputStream;
 import java.util.Locale;
 
 @AnonymousAllowed
@@ -120,8 +118,10 @@ public class MainLayout extends AppLayout {
 			var user = optionalUserRecord.get();
 
 			var avatar = new Avatar("%s %s".formatted(user.getFirstName(), user.getLastName()));
-			var resource = new StreamResource("profile-pic", () -> new ByteArrayInputStream(user.getPicture()));
-			avatar.setImageResource(resource);
+			avatar.setImageHandler(downloadEvent -> {
+				downloadEvent.setFileName("profile-pic.jpg");
+				downloadEvent.getOutputStream().write(user.getPicture());
+			});
 			avatar.setThemeName("xsmall");
 			avatar.getElement().setAttribute("tabindex", "-1");
 
