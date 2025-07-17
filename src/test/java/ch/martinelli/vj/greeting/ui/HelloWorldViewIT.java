@@ -16,7 +16,7 @@ class HelloWorldViewIT extends PlaywrightIT {
 		var appName = page.locator("h1");
 		assertThat(appName.innerText()).isEqualTo("Vaadin jOOQ Template");
 
-		var title = page.locator("h2");
+		var title = page.locator("h2.text-l.m-0");
 		assertThat(title.innerText()).isEqualTo("Hello World");
 
 		page.locator("vaadin-text-field[id='name'] > input").fill("Test");
