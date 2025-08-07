@@ -33,7 +33,7 @@
 
         <jspecify.version>1.0.0</jspecify.version>
         <errorprone.version>2.40.0</errorprone.version>
-        <nullaway.version>0.12.7</nullaway.version>
+        <nullaway.version>0.12.8</nullaway.version>
         <spring-javaformat-maven-plugin.version>0.0.47</spring-javaformat-maven-plugin.version>
 
         <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
