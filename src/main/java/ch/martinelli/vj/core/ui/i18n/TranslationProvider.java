@@ -13,10 +13,10 @@ import java.util.Locale;
 @Component
 public class TranslationProvider extends DefaultI18NProvider {
 
-    private static final List<Locale> PROVIDED_LOCALES = List.of(Locale.ENGLISH, Locale.GERMAN);
+	private static final List<Locale> PROVIDED_LOCALES = List.of(Locale.ENGLISH, Locale.GERMAN);
 
-    public TranslationProvider() {
-        super(PROVIDED_LOCALES);
-    }
+	public TranslationProvider() {
+		super(PROVIDED_LOCALES);
+	}
 
 }
