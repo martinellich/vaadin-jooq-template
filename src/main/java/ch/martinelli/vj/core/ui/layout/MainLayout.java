@@ -37,7 +37,7 @@ public class MainLayout extends AppLayout {
 
 	private final AccessAnnotationChecker accessAnnotationChecker;
 
-	private H2 viewTitle;
+	private final H2 viewTitle = new H2();
 
 	public MainLayout(SecurityContext securityContext, AccessAnnotationChecker accessAnnotationChecker) {
 		this.securityContext = securityContext;
@@ -58,7 +58,6 @@ public class MainLayout extends AppLayout {
 		var toggle = new DrawerToggle();
 		toggle.setAriaLabel("Menu toggle");
 
-		viewTitle = new H2();
 		viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
 		addToNavbar(true, toggle, viewTitle);

@@ -68,9 +68,9 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 	}
 
 	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter Long personId) {
+	public void setParameter(BeforeEvent beforeEvent, @Nullable @OptionalParameter Long personId) {
 		if (personId != null) {
-			personDao.findById(personId).ifPresent(personRecord -> person = personRecord);
+			person = personDao.findById(personId).orElse(new PersonRecord());
 		}
 		else {
 			person = new PersonRecord();

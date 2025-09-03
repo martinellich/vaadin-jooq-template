@@ -75,7 +75,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 	}
 
 	@Override
-	public void setParameter(BeforeEvent beforeEvent, @OptionalParameter String username) {
+	public void setParameter(BeforeEvent beforeEvent, @Nullable @OptionalParameter String username) {
 		if (username != null) {
 			userDAO.findUserWithRolesByUsername(username).ifPresent(userRecord -> user = userRecord);
 		}
