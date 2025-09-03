@@ -35,7 +35,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
-		if (securityContext.getLoggedInUser().isPresent()) {
+        var loggedInUser = securityContext.getLoggedInUser();
+        if (loggedInUser.isPresent()) {
 			// Already logged in
 			setOpened(false);
 			event.forwardTo("");
