@@ -202,7 +202,8 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 		});
 
 		save.addClickListener(e -> {
-			if (user != null && binder.validate().isOk()) {
+            var validationStatus = binder.validate();
+            if (user != null && validationStatus.isOk()) {
 				try {
 					binder.writeChangedBindingsToBean(user);
 
