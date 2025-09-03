@@ -40,7 +40,7 @@ class UserViewTest extends KaribuTest {
 
 	@Test
 	void navigate_to_user() {
-		UI.getCurrent().navigate(UserView.class, "user");
+		UI.getCurrent().navigate(UserView.class, "admin");
 
 		var grid = _get(Grid.class);
 		assertThat(GridKt._size(grid)).isEqualTo(2);
@@ -50,10 +50,10 @@ class UserViewTest extends KaribuTest {
 		assertThat(selectedItems).hasSize(1)
 			.first()
 			.extracting(userWithRoles -> userWithRoles.getUser().getFirstName())
-			.isEqualTo("John");
+			.isEqualTo("Emma");
 
 		var firstNameTextField = _get(TextField.class, s -> s.withLabel("First Name"));
-		assertThat(firstNameTextField.getValue()).isEqualTo("John");
+		assertThat(firstNameTextField.getValue()).isEqualTo("Emma");
 	}
 
 	@Test

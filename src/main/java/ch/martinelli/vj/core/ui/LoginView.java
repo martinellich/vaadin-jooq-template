@@ -22,7 +22,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 		this.securityContext = securityContext;
 		setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
-		LoginI18n i18n = LoginI18n.createDefault();
+		var i18n = LoginI18n.createDefault();
 		i18n.setHeader(new LoginI18n.Header());
 		i18n.getHeader().setTitle("Vaadin jOOQ Template");
 		i18n.getHeader().setDescription("Login using user/user or admin/admin");
