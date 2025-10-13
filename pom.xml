@@ -29,7 +29,7 @@
         <playwright.version>1.55.0</playwright.version>
         <mopo.version>0.0.5</mopo.version>
         <archunit.version>1.4.1</archunit.version>
-        <jacoco.version>0.8.13</jacoco.version>
+        <jacoco.version>0.8.14</jacoco.version>
 
         <jspecify.version>1.0.0</jspecify.version>
         <errorprone.version>2.42.0</errorprone.version>
