@@ -32,7 +32,7 @@
         <jacoco.version>0.8.14</jacoco.version>
 
         <jspecify.version>1.0.0</jspecify.version>
-        <errorprone.version>2.42.0</errorprone.version>
+        <errorprone.version>2.43.0</errorprone.version>
         <nullaway.version>0.12.10</nullaway.version>
         <spring-javaformat-maven-plugin.version>0.0.47</spring-javaformat-maven-plugin.version>
 
