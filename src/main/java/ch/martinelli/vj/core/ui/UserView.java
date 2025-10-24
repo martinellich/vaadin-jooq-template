@@ -211,7 +211,7 @@ public class UserView extends Div implements HasUrlParameter<String>, HasDynamic
 						userDAO.save(user);
 						Notifier.success(getTranslation("User saved"));
 					}
-					catch (DataAccessException ex) {
+					catch (DataAccessException _) {
 						Notifier.error(getTranslation("User could not be saved!"));
 					}
 				}

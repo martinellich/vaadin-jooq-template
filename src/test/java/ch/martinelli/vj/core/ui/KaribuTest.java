@@ -76,10 +76,10 @@ public abstract class KaribuTest {
 			if (VaadinServletRequest.getCurrent() != null) {
 				var request = (FakeRequest) VaadinServletRequest.getCurrent().getRequest();
 				request.setUserPrincipalInt(null);
-				request.setUserInRole((principal, role) -> false);
+				request.setUserInRole((_, _) -> false);
 			}
 		}
-		catch (IllegalStateException ignore) {
+		catch (IllegalStateException _) {
 			// Ignore
 		}
 	}

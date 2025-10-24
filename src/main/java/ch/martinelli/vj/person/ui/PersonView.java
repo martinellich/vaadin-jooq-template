@@ -202,7 +202,7 @@ public class PersonView extends Div implements HasUrlParameter<Long>, HasDynamic
 						personDao.save(person);
 						Notifier.success(getTranslation("Person saved"));
 					}
-					catch (DataAccessException ex) {
+					catch (DataAccessException _) {
 						Notifier.error(getTranslation("Person could not be saved!"));
 					}
 				}
