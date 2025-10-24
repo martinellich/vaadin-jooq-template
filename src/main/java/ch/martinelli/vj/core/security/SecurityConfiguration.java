@@ -1,21 +1,28 @@
 package ch.martinelli.vj.core.security;
 
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
+import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
+import com.vaadin.flow.spring.security.stateless.VaadinStatelessSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms;
+import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
-@EnableWebSecurity
 @Configuration
-public class SecurityConfiguration extends VaadinWebSecurity {
+@EnableWebSecurity
+@Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
+public class SecurityConfiguration {
 
 	private final String authSecret;
 
@@ -28,18 +35,21 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(
-				authorize -> authorize.requestMatchers("/images/*.png", "/line-awesome/*").permitAll());
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(c -> c.requestMatchers("/images/*.png", "/line-awesome/*")
+			.permitAll()
+			.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+			.permitAll());
 
-		super.configure(http);
+		http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView("login", "/"));
 
-		setLoginView(http, "login");
+		http.with(new VaadinStatelessSecurityConfigurer<>(),
+				stateless -> stateless.issuer("ch.martinelli.vj")
+					.withSecretKey()
+					.secretKey(new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256)));
 
-		// https://vaadin.com/blog/jwt-authentication-with-vaadin-flow-for-better-developer-and-user-experience
-		setStatelessAuthentication(http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256),
-				"ch.martinelli.vj", 3600);
+		return http.build();
 	}
 
 }

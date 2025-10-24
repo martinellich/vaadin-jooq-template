@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.List;
+import java.util.Locale;
 
 @Import(TestVjConfiguration.class)
 @SpringBootTest
@@ -34,6 +35,7 @@ public abstract class KaribuTest {
 	@BeforeAll
 	public static void discoverRoutes() {
 		routes = new Routes().autoDiscoverViews("ch.martinelli.vj");
+		Locale.setDefault(Locale.ENGLISH);
 	}
 
 	@BeforeEach

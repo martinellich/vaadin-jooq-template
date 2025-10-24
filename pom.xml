@@ -15,8 +15,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <java.version>21</java.version>
-        <vaadin.version>24.8.3</vaadin.version>
+        <java.version>25</java.version>
+        <vaadin.version>24.9.3</vaadin.version>
         <line-awesome.version>2.1.0</line-awesome.version>
 
         <jooq.version>3.20.8</jooq.version>
@@ -83,6 +83,10 @@
             <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.seventytwo.oss</groupId>
             <artifactId>vaadin-jooq</artifactId>
             <version>${vaadin-jooq.version}</version>
@@ -130,6 +134,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -218,7 +223,7 @@
                         <configuration>
                             <database>
                                 <type>POSTGRES</type>
-                                <containerImage>postgres:16.4</containerImage>
+                                <containerImage>postgres:17.6</containerImage>
                             </database>
                             <flyway>
                                 <locations>filesystem:src/main/resources/db/migration</locations>
