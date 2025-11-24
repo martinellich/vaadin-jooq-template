@@ -28,7 +28,7 @@ public abstract class PlaywrightIT {
 
 	protected Mopo mopo;
 
-    @BeforeAll
+	@BeforeAll
 	static void setUpClass() {
 		playwright = Playwright.create();
 		BrowserType browserType = playwright.chromium();
@@ -48,7 +48,7 @@ public abstract class PlaywrightIT {
 	void setUp() {
 		browserContext = browser.newContext();
 		page = browserContext.newPage();
-        mopo = new Mopo(page);
+		mopo = new Mopo(page);
 	}
 
 	@AfterEach

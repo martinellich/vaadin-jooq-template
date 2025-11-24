@@ -20,3 +20,4 @@ drivers/
 error-screenshots/
 webpack.generated.js
 /src/main/frontend/generated/
+/.mvn/wrapper/maven-wrapper.jar
