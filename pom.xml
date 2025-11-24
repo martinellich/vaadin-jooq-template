@@ -296,7 +296,7 @@
                                 </database>
                                 <name>ch.martinelli.oss.jooq.EqualsAndHashCodeJavaGenerator</name>
                                 <target>
-                                    <packageName>app.voluntarix.db</packageName>
+                                    <packageName>ch.martinelli.vj.db</packageName>
                                 </target>
                             </generator>
                         </configuration>
