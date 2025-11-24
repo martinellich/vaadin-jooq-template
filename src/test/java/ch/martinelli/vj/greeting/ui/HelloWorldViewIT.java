@@ -1,7 +1,6 @@
 package ch.martinelli.vj.greeting.ui;
 
 import ch.martinelli.vj.core.ui.PlaywrightIT;
-import in.virit.mopo.Mopo;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +10,6 @@ class HelloWorldViewIT extends PlaywrightIT {
 	@Test
 	void say_hello() {
 		page.navigate("http://localhost:%d".formatted(localServerPort));
-		var mopo = new Mopo(page);
 
 		var appName = page.locator("h1");
 		assertThat(appName.innerText()).isEqualTo("Vaadin jOOQ Template");
@@ -21,6 +19,8 @@ class HelloWorldViewIT extends PlaywrightIT {
 
 		page.locator("vaadin-text-field[id='name'] > input").fill("Test");
 		mopo.click("id=say-hello");
+
+		mopo.waitForConnectionToSettle();
 
 		var notification = page.locator("vaadin-notification-card");
 		System.out.println(notification.innerText());
