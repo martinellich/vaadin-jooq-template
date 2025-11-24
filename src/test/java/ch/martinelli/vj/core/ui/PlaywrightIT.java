@@ -1,6 +1,6 @@
 package ch.martinelli.vj.core.ui;
 
-import ch.martinelli.vj.TestDbConfiguration;
+import ch.martinelli.vj.TestcontainersConfiguration;
 import com.microsoft.playwright.*;
 import in.virit.mopo.Mopo;
 import org.junit.jupiter.api.AfterAll;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
-@Import(TestDbConfiguration.class)
+@Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class PlaywrightIT {
 
