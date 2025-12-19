@@ -24,7 +24,6 @@
         <jooq-utilities.version>1.1.2</jooq-utilities.version>
         <vaadin-jooq.version>2.0.4</vaadin-jooq.version>
 
-        <testcontainers.version>2.0.2</testcontainers.version>
         <flyway-maven-plugin.version>11.19.1</flyway-maven-plugin.version>
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
 
