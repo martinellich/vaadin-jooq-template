@@ -132,7 +132,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
 			div.add(LumoIcon.DROPDOWN.create());
 			div.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Gap.SMALL);
 			userName.add(div);
-			userName.getSubMenu().addItem(getTranslation("Sign out"), e -> securityContext.logout());
+			userName.getSubMenu().addItem(getTranslation("Sign out"), _ -> securityContext.logout());
 
 			verticalLayout.add(userMenu);
 		}
