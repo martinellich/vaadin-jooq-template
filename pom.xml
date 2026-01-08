@@ -24,7 +24,7 @@
         <jooq-utilities.version>1.1.2</jooq-utilities.version>
         <vaadin-jooq.version>2.0.4</vaadin-jooq.version>
 
-        <flyway-maven-plugin.version>11.20.0</flyway-maven-plugin.version>
+        <flyway-maven-plugin.version>11.20.1</flyway-maven-plugin.version>
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
 
         <karibu-testing.version>2.6.1</karibu-testing.version>
