@@ -27,7 +27,7 @@
         <flyway-maven-plugin.version>11.20.1</flyway-maven-plugin.version>
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
 
-        <karibu-testing.version>2.6.1</karibu-testing.version>
+        <karibu-testing.version>2.6.2</karibu-testing.version>
         <playwright.version>1.57.0</playwright.version>
         <mopo.version>0.0.6</mopo.version>
         <archunit.version>1.4.1</archunit.version>
