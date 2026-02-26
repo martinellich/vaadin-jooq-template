@@ -21,7 +21,7 @@
 
         <jooq.version>3.20.11</jooq.version>
         <jooq-spring.version>0.4.0</jooq-spring.version>
-        <jooq-utilities.version>1.1.2</jooq-utilities.version>
+        <jooq-utilities.version>1.1.4</jooq-utilities.version>
         <vaadin-jooq.version>2.1.1</vaadin-jooq.version>
 
         <flyway-maven-plugin.version>12.0.2</flyway-maven-plugin.version>
