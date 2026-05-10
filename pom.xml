@@ -27,7 +27,6 @@
         <flyway-maven-plugin.version>12.5.0</flyway-maven-plugin.version>
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
 
-        <karibu-testing.version>2.7.0</karibu-testing.version>
         <playwright.version>1.58.0</playwright.version>
         <mopo.version>0.0.6</mopo.version>
         <archunit.version>1.4.2</archunit.version>
@@ -179,9 +178,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.mvysny.kaributesting</groupId>
-            <artifactId>karibu-testing-v10-spring</artifactId>
-            <version>${karibu-testing.version}</version>
+            <groupId>com.vaadin</groupId>
+            <artifactId>browserless-test-junit6</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

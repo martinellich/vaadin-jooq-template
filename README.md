@@ -5,7 +5,7 @@
 ## Introduction
 
 This is a template project, based on my experience and my opinion, that shows how to  integrate [Vaadin](https://vaadin.com) and
-[jOOQ](https://jooq.org) and how to test it with [Karibu Testing](https://github.com/mvysny/karibu-testing) and [Playwright](https://playwright.dev).
+[jOOQ](https://jooq.org) and how to test it with [Vaadin Browserless Testing](https://vaadin.com/docs/latest/flow/testing/browserless) and [Playwright](https://playwright.dev).
 
 It uses [Testcontainers](https://testcontainers.com) for generating the jOOQ classes and integration testing and Flyway for the database 
 migrations.
@@ -29,7 +29,7 @@ Thus, [Docker](https://www.docker.com) or [Testcontainers Cloud](https://testcon
 
 There are two base classes:
 
-- `KaribuTest` can be used for fast [browser-less testing](https://mvysny.github.io/browserless-web-testing/), aka UI unit test. Karibu sets up a Vaadin mock environment.
+- `AbstractBrowserlessTest` can be used for fast [browserless testing](https://vaadin.com/docs/latest/flow/testing/browserless), aka UI unit test. It extends Vaadin's `SpringBrowserlessTest`, which sets up a Vaadin mock environment without a browser. Use Spring Security's `@WithMockUser` to simulate authenticated users.
 - `PlaywrightIT` configures Playwright for E2E tests. This class uses SpringBootTest at a random port.
 
 The Playwright test uses [Mopo](https://github.com/viritin/mopo), which simplifies the testing of Vaadin applications with Playwright.
@@ -79,9 +79,9 @@ Read more in the blog of [Matti Tahvonen](https://vaadin.com/blog/jwt-authentica
 
 - Go to the [Testcontainers website](https://testcontainers.com).
 
-### Karibu Testing
+### Vaadin Browserless Testing
 
-- Check out the [GitHub project](https://github.com/mvysny/karibu-testing).
+- Read the [documentation](https://vaadin.com/docs/latest/flow/testing/browserless).
 
 ### Playwright
 

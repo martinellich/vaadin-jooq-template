@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Vaadin/jOOQ template project that demonstrates integration of Vaadin Flow with jOOQ for type-safe database access, using Spring Boot as the foundation. The project uses Spring Security with JWT authentication and includes comprehensive testing setups with both Karibu Testing and Playwright.
+This is a Vaadin/jOOQ template project that demonstrates integration of Vaadin Flow with jOOQ for type-safe database access, using Spring Boot as the foundation. The project uses Spring Security with JWT authentication and includes comprehensive testing setups with both Vaadin Browserless Testing and Playwright.
 
 ## Technology Stack
 
@@ -12,7 +12,7 @@ This is a Vaadin/jOOQ template project that demonstrates integration of Vaadin F
 - **Frontend**: Vaadin 24.8.3 (Flow), custom CSS themes
 - **Database**: PostgreSQL with Flyway migrations
 - **Security**: Spring Security with JWT authentication  
-- **Testing**: JUnit 5, Karibu Testing (browser-less UI tests), Playwright (E2E tests), TestContainers
+- **Testing**: JUnit 5, Vaadin Browserless Testing (server-side UI unit tests), Playwright (E2E tests), TestContainers
 - **Code Quality**: ErrorProne, NullAway, Spring Java Format, SonarCloud, JaCoCo
 
 ## Development Commands
@@ -86,14 +86,14 @@ ch.martinelli.vj/
 - **JWT Authentication**: Stateless JWT tokens for better developer experience
 - **User Management**: `UserDAO`, `UserDetailsServiceImpl` for Spring Security integration
 - **Authorization**: Role-based access using `@RolesAllowed` annotations
-- **Test Security**: `KaribuTest` provides login helpers for testing
+- **Test Security**: Tests use Spring Security's `@WithMockUser` to simulate authenticated users
 
 ### UI Architecture
 - **Layout**: `MainLayout` with Vaadin App Layout, side navigation, and user menu
 - **Views**: Each feature has its own view package with Vaadin Flow components
 - **I18N**: Support for English and German with `TranslationProvider`
 - **Testing**: Two-tiered testing approach:
-  - `KaribuTest`: Fast browser-less testing with Karibu Testing
+  - `AbstractBrowserlessTest`: Fast server-side UI testing with Vaadin Browserless Testing (extends `SpringBrowserlessTest`)
   - `PlaywrightIT`: Full E2E testing with Playwright
 
 ## Important Development Notes
@@ -109,7 +109,8 @@ ch.martinelli.vj/
 - **Regeneration**: Run `./mvnw compile` to regenerate jOOQ classes after schema changes
 
 ### Testing Strategy
-- **Unit Tests**: Extend `KaribuTest` for fast UI testing without browser
+- **Unit Tests**: Extend `AbstractBrowserlessTest` for fast UI testing without a browser. Use `$()` to query components and `test(...)` to wrap testers (`navigate()`, `setValue()`, `click()`, etc.).
+- **Test Authentication**: Annotate test classes/methods with `@WithMockUser` (e.g. `@WithMockUser(username = "admin", roles = Role.ADMIN)`) instead of manually building `JwtAuthenticationToken`s.
 - **Integration Tests**: Extend `PlaywrightIT` for full E2E browser testing
 - **Database**: Both test base classes use TestContainers for isolated database testing
 - **Mopo**: Playwright tests use Mopo library for simplified Vaadin component interaction
