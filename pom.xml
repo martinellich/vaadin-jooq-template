@@ -462,8 +462,8 @@
                         <version>${jacoco.version}</version>
                         <configuration>
                             <excludes>
-                                <exclude>ch/martinelli/vj/VjApplication.*</exclude>
-                                <exclude>ch/martinelli/vj/db/**/**.*</exclude>
+                                <exclude>ch/martinelli/vj/VjApplication</exclude>
+                                <exclude>ch/martinelli/vj/db/**</exclude>
                             </excludes>
                         </configuration>
                         <executions>
