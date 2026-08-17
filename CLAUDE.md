@@ -100,7 +100,7 @@ ch.martinelli.vj/
 
 ### Running the Application
 - **Docker Required**: TestContainers needs Docker running for database
-- **Development Class**: Use `TestVjApplication` for development (auto-starts PostgreSQL container)
+- **Development Class**: Use `TestApplication` for development (auto-starts PostgreSQL container)
 - **jOOQ Generation**: Always run `./mvnw compile` after database schema changes
 
 ### Database Development
