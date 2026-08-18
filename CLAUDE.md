@@ -113,7 +113,7 @@ ch.martinelli.vj/
 - **Test Authentication**: Annotate test classes/methods with `@WithMockUser` (e.g. `@WithMockUser(username = "admin", roles = Role.ADMIN)`) instead of manually building `JwtAuthenticationToken`s.
 - **Integration Tests**: Extend `PlaywrightIT` for full E2E browser testing
 - **Database**: Both test base classes use TestContainers for isolated database testing
-- **Mopo**: Playwright tests use Mopo library for simplified Vaadin component interaction
+- **Drama Finder**: Playwright tests use the Drama Finder library (`org.vaadin.addons:dramafinder`) for type-safe Vaadin element wrappers (e.g. `TextFieldElement.getByLabel(page, ...)`)
 
 ### Code Quality Standards
 - **ErrorProne**: Enabled with NullAway for null safety
