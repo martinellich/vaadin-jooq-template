@@ -109,7 +109,7 @@ ch.martinelli.vj/
 - **Regeneration**: Run `./mvnw compile` to regenerate jOOQ classes after schema changes
 
 ### Testing Strategy
-- **Unit Tests**: Extend `AbstractBrowserlessTest` for fast UI testing without a browser. Use `$()` to query components and `test(...)` to wrap testers (`navigate()`, `setValue()`, `click()`, etc.).
+- **Unit Tests**: Extend `AbstractBrowserlessTest` for fast UI testing without a browser. Use `find(...)` to query components and `test(...)` to wrap testers (`navigate()`, `setValue()`, `click()`, etc.).
 - **Test Authentication**: Annotate test classes/methods with `@WithMockUser` (e.g. `@WithMockUser(username = "admin", roles = Role.ADMIN)`) instead of manually building `JwtAuthenticationToken`s.
 - **Integration Tests**: Extend `PlaywrightIT` for full E2E browser testing
 - **Database**: Both test base classes use TestContainers for isolated database testing
