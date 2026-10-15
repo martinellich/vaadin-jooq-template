@@ -4,6 +4,7 @@ import ch.martinelli.vj.db.tables.records.UserRecord;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class UserWithRoles {
@@ -32,6 +33,22 @@ public class UserWithRoles {
 
 	public void setRoles(Set<String> roles) {
 		this.roles = roles;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof UserWithRoles other) || user.getUsername() == null) {
+			return false;
+		}
+		return user.getUsername().equals(other.user.getUsername());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(user.getUsername());
 	}
 
 }
